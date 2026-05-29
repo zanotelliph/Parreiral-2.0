@@ -11,12 +11,17 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('parreiral_2', function (Blueprint $table) {
+        Schema::create('cliente', function (Blueprint $table) {
             $table->id();
-            $table->timestamps();
+            $table->string('nome',100);
+            $table->string('cpf',16);
+            $table->string('telefone',20)->nullable();
+            $table->timestamps('email', 50);
+            $table->timestamps('endereco', 300);
+            $table->timestamps('preferenciadecompra', 500);
+            $table->timestamps('preferenciadecompra', 10);
         });
     }
-
     /**
      * Reverse the migrations.
      */

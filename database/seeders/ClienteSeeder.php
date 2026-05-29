@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use App\Models\CategoriaCliente;
 
 class ParreiralSeeder extends Seeder
 {
@@ -12,6 +13,7 @@ class ParreiralSeeder extends Seeder
      */
     public function run(): void
     {
-        //
+        CategoriaCliente::factory()->count(10)->create();
     }
 }
+
