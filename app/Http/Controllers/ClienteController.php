@@ -1,95 +1,124 @@
 <?php
+
 namespace App\Http\Controllers;
 
-use App\Models\Cliente;
 use Illuminate\Http\Request;
+use App\Models\cliente;
+use App\Models\Categoriacliente;
 
-class ClienteController extends Controller
+class clienteController extends Controller
 {
 
-    public function index()
+    function index()
     {
-        $clientes = Cliente::all();
+        $dados = cliente::all(); //select * from cliente
 
-        return view('cliente.list', [
-            'clientes' => $clientes
-        ]);
+        // dd($dados);
+        //var_dump($dados);
+        //  exit;
+
+        return view('cliente.list', ['dados' => $dados]);
     }
 
-    public function create()
+    function create()
     {
-        return view('cliente.form');
-    }
+        $categorias = Categoriacliente::orderBy('nome')->get();
 
-    public function store(Request $request)
+        return view('cliente.form', ['categorias' => $categorias]);
+    }
+    function validateRequest(Request $request)
     {
         $request->validate([
-            'nome' => 'required|max:100',
-            'telefone' => 'required|max:20',
-            'email' => 'required|email|unique:clientes,email',
-            'endereco' => 'required|max:200',
-            'preferenciasCompra' => 'nullable',
-            'historicoVisitas' => 'nullable',
-            'identificadorUnico' => 'required|unique:clientes,identificadorUnico'
-        ]);
+            'nome' => 'required',
+            'telefone' => 'required',
+            'email'=> 'required',
+            'endereco'=> 'required',
+            'cpf' => 'required',
+            'preferenciadecompra' => 'nullable|string',
+            'historicodevisitas' => 'nullable|string',
+            'id' => 'nullable|string|unique:clientes,id',
 
-        Cliente::create([
-            'nome' => $request->nome,
-            'telefone' => $request->telefone,
-            'email' => $request->email,
-            'endereco' => $request->endereco,
-            'preferenciasCompra' => $request->preferenciasCompra,
-            'historicoVisitas' => $request->historicoVisitas,
-            'identificadorUnico' => $request->identificadorUnico
-        ]);
-
-        return redirect('/cliente');
-    }
-
-    public function show(Cliente $cliente)
-    {
-        return view('cliente.show', [
-            'cliente' => $cliente
+            'imagem' => 'nullable|image|mimes:png,jpg,jpeg'
+            ], [
+            'nome.required' => "O :attribute é obrigatório",
+            'cpf.required' => "O :attribute é obrigatório",
+            'email.required' => "O :attribute é obrigatório",
+            'telefone.required' => "O :attribute é obrigatório",
+            'preferenciadecompra.string' => ' ex.: vinho favorito',
+            'historicodevisitas.int' => 'ex.:1',
+            'imagem.image' => "O :attribute deve ser enviado",
+            'imagem.mimes' => "O :attribute é deve ser das extensões:PNG, JPEG e JPG",
         ]);
     }
 
-
-    public function edit(Cliente $cliente)
+    function store(Request $request)
     {
+        $this->validateRequest($request);
+        $data = $request->all();
+        $imagem = $request->file('imagem');
+
+        if ($imagem) {
+            $nome_imagem = date('YmdiHs') . "." . $imagem->getClientOriginalExtension();
+            $diretorio = "imagem/cliente/";
+            $imagem->storeAs($diretorio, $nome_imagem, 'public');
+
+            $data['imagem'] = $diretorio . $nome_imagem;
+        }
+
+        cliente::create($data);
+
+        return redirect('cliente')->with('success', 'Registro cadastrado com sucesso!');
+    }
+
+    function edit($id)
+    {
+        $dado = cliente::find($id);
+        $categorias = Categoriacliente::orderBy('nome')->get();
+
+
         return view('cliente.form', [
-            'cliente' => $cliente
+            'dado' => $dado,
+            'categorias' => $categorias
         ]);
     }
 
-    public function update(Request $request, Cliente $cliente)
+    function update(Request $request, $id)
     {
-        $request->validate([
-            'nome' => 'required|max:100',
-            'telefone' => 'required|max:20',
-            'email' => 'required|email|unique:clientes,email,' . $cliente->id,
-            'endereco' => 'required|max:200',
-            'preferenciasCompra' => 'nullable',
-            'historicoVisitas' => 'nullable',
-            'identificadorUnico' => 'required|unique:clientes,identificadorUnico,' . $cliente->id
-        ]);
+        $this->validateRequest($request);
+        $data = $request->all();
+        $imagem = $request->file('imagem');
 
-        $cliente->update([
-            'nome' => $request->nome,
-            'telefone' => $request->telefone,
-            'email' => $request->email,
-            'endereco' => $request->endereco,
-            'preferenciasCompra' => $request->preferenciasCompra,
-            'historicoVisitas' => $request->historicoVisitas,
-            'identificadorUnico' => $request->identificadorUnico
-        ]);
+        if ($imagem) {
+            $nome_imagem = date('YmdiHs') . "." . $imagem->getClientOriginalExtension();
+            $diretorio = "imagem/cliente/";
+            $imagem->storeAs($diretorio, $nome_imagem, 'public');
 
-        return redirect('/cliente');
+            $data['imagem'] = $diretorio . $nome_imagem;
+        }
+
+        cliente::find($id)->update($data);
+
+        return redirect('cliente')->with('success', 'Registro atualizado com sucesso!');
     }
 
-    public function destroy(Cliente $cliente)
+    function destroy($id)
     {
-        $cliente->delete();
+        cliente::destroy($id);
+        return redirect('cliente')->with('success', 'Registro removido com sucesso!');
+    }
 
-        return redirect('/cliente');
+    function search(Request $request)
+    {
+        if (!empty($request->valor)) {
+            $dados = cliente::where(
+                $request->tipo,
+                'like',
+                '%' . $request->valor . '%'
+            )->get();
+        } else {
+            $dados = cliente::all();
+        }
+
+        return view('cliente.list', ['dados' => $dados]);
     }
 }
