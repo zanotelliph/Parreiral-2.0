@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\cliente;
-use App\Models\Categoriacliente;
+
 
 class clienteController extends Controller
 {
@@ -22,7 +22,7 @@ class clienteController extends Controller
 
     function create()
     {
-        $categorias = Categoriacliente::orderBy('nome')->get();
+        $categorias = cliente::orderBy('nome')->get();
 
         return view('cliente.form', ['categorias' => $categorias]);
     }

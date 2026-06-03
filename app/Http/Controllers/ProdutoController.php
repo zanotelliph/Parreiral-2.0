@@ -1,18 +1,18 @@
 <?php
 namespace App\Http\Controllers;
 
-use App\Models\Produto;
 use Illuminate\Http\Request;
+use App\Models\produto;
 
 class ProdutoController extends Controller
 {
 
-    public function index()
+    function index()
     {
-        $produtos = produto::all();
+        $dados = produto::all(); //select * from produto
 
         return view('produto.list', [
-            'produtos' => $produtosa
+            'produto' => $produto
         ]);
     }
 
@@ -26,11 +26,11 @@ class ProdutoController extends Controller
         $request->validate([
             'nome' => 'required|max:100',
             'telefone' => 'required|max:20',
-            'email' => 'required|email|unique:produtos,email',
+            'email' => 'required|email|unique:produto,email',
             'endereco' => 'required|max:200',
             'preferenciasCompra' => 'nullable',
             'historicoVisitas' => 'nullable',
-            'identificadorUnico' => 'required|unique:produtos,identificadorUnico'
+            'identificadorUnico' => 'required|unique:produto,identificadorUnico'
         ]);
 
         produto::create([
@@ -66,11 +66,11 @@ class ProdutoController extends Controller
         $request->validate([
             'nome' => 'required|max:100',
             'telefone' => 'required|max:20',
-            'email' => 'required|email|unique:produtos,email,' . $produto->id,
+            'email' => 'required|email|unique:produto,email,' . $produto->id,
             'endereco' => 'required|max:200',
             'preferenciasCompra' => 'nullable',
             'historicoVisitas' => 'nullable',
-            'identificadorUnico' => 'required|unique:produtos,identificadorUnico,' . $produto->id
+            'identificadorUnico' => 'required|unique:produto,identificadorUnico,' . $produto->id
         ]);
 
         $produto->update([

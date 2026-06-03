@@ -2,7 +2,7 @@
 @section('titulo', 'Formulário cliente')
 @section('conteudo')
 
-    <h4>Formulário cliente</h4>
+    <h4>Cadastro de Clientes</h4>
 
     @php
         if (!empty($dado->id)) {
@@ -17,24 +17,38 @@
         @if (!empty($dado->id))
             @method('PUT')
         @endif
-        < class="row">
+        <div class="row">
+            <label for="id" class="form-label">Identificador Único</label>
             <input type="hidden" name="id" value="{{ $dado->id ?? '' }}">
             <div class="col">
-                <label for="nome" class="form-label">Nome</label>
+                <label for="nome" class="form-label">Nome Completo</label>
                 <input type="text" class="form-control" name="nome" value="{{ old('nome', $dado->nome ?? '') }}">
+            </div>
+            <div class="col">
+                <label class="form-label" for="cpf">CPF</label>
+                <input type="text" class="form-control" name="cpf" value="{{ old('cpf', $dado->cpf ?? '') }}">
             </div>
             <div class="col">
                 <label for="telefone" class="form-label">Telefone</label>
                 <input type="text" class="form-control" name="telefone"
                     value="{{ old('telefone', $dado->telefone ?? '') }}">
             </div>
+            <div class="col">
+                <label class="form-label">Data de Cadastro</label>
+                <input type="date" class="form-control" name="data_cadastro"
+                    value="{{ old('data_cadastro', isset($dado->endereco->data_cadastro) ? \Carbon\Carbon::parse($dado->endereco->data_cadastro)->format('Y-m-d') : '') }}">
+                </div>
+            <div class="col">
+                    <label class="form-label">Email</label>
+                    <input type="email" class="form-control" name="email"
+                        value="{{ old('email', $dado->email ?? '') }}">
+                </div>
                     {{-- ENDEREÇO --}}
-            <div class="row">
-
-                <div class="col">
-                    <label class="form-label">CEP</label>
-                    <input type="text" class="form-control" name="cep"
-                        value="{{ old('cep', $dado->endereco->cep ?? '') }}">
+        <div class="row">
+            <div class="col">
+                <label class="form-label">CEP</label>
+                <input type="text" class="form-control" name="cep"
+                    value="{{ old('cep', $dado->endereco->cep ?? '') }}">
                 </div>
 
                 <div class="col">
@@ -42,39 +56,30 @@
                     <input type="text" class="form-control" name="rua"
                         value="{{ old('rua', $dado->endereco->rua ?? '') }}">
                 </div>
-
             </div>
-
             <div class="row">
-
                 <div class="col">
                     <label class="form-label">Número</label>
                     <input type="text" class="form-control" name="numero"
                         value="{{ old('numero', $dado->endereco->numero ?? '') }}">
                 </div>
-
                 <div class="col">
                     <label class="form-label">Complemento</label>
                     <input type="text" class="form-control" name="complemento"
                         value="{{ old('complemento', $dado->endereco->complemento ?? '') }}">
                 </div>
-
             </div>
-
             <div class="row">
-
                 <div class="col">
                     <label class="form-label">Bairro</label>
                     <input type="text" class="form-control" name="bairro"
                         value="{{ old('bairro', $dado->endereco->bairro ?? '') }}">
                 </div>
-
                 <div class="col">
                     <label class="form-label">Cidade</label>
                     <input type="text" class="form-control" name="cidade"
                         value="{{ old('cidade', $dado->endereco->cidade ?? '') }}">
                 </div>
-
                 <div class="col">
                     <label class="form-label">Estado</label>
                     <select class="form-control" name="estado">
@@ -109,14 +114,6 @@
                     </select>
                 </div>
             </div>
-            <div class="col">
-                <label class="form-label" for="cpf">CPF</label>
-                <input type="text" class="form-control" name="cpf" value="{{ old('cpf', $dado->cpf ?? '') }}">
-            </div>
-            <div class="col">
-                <label class="form-label" for="cpf"></label>
-                <input type="text" class="form-control" name="cpf" value="{{ old('cpf', $dado->cpf ?? '') }}">
-            </div>
             {{-- Preferências --}}
             <div class="row">
 
@@ -136,16 +133,46 @@
                     <input type="number" class="form-control" name="numero_visitas"
                         value="{{ old('numero_visitas', $dado->endereco->numero_visitas ?? 0) }}" min="0">
                 </div>
-        </div>
-        <div class="row">
-            <div class="col">
-                <label class="form-label" for="imagem">Imagem</label>
-                @php
-                    $nome_imagem = !empty($dado->imagem) ? $dado->imagem : 'sem_imagem.png';
-                @endphp
-                <img src="/storage/{{ $nome_imagem }}" class="rounded-circle" width="200px" height="200px" alt="imagem">
-                <input type="file" name="imagem" class="form-control" value="{{ old('imagem', $dado->imagem ?? '') }}">
+                <div class="col">
+                    <label class="form-label">Data da ùltima Visita</label>
+                    <input type="date" class="form-control" name="data_ultima_visita"
+                        value="{{ old('data_ultima_visita', isset($dado->endereco->data_ultima_visita) ? \Carbon\Carbon::parse($dado->endereco->data_ultima_visita)->format('Y-m-d') : '') }}">
+                </div>
+                <div class="col">
+                    <label class="form-label">Cliente fidelizado</label>
+                    <select class="form-select" name="cliente_fidelizado">
+                        <option value="0" {{ old('cliente_fidelizado', $dado->endereco->cliente_fidelizado ?? 0) == 0 ? 'selected' : '' }}>
+                            Não
+                        </option>
+                        <option value="1" {{ old('cliente_fidelizado', $dado->endereco->cliente_fidelizado ?? 0) == 1 ? 'selected' : '' }}>
+                            Sim
+                        </option>
+                    </select>
+                </div>
+                <div class="col">
+                    <label class="form-label">Nível de Fidelidade</label>
+                    <select class="form-select" name="nível_fidelidade">
+                        <option value="0" {{ old('nível_fidelidade', $dado->endereco->nível_fidelidade ?? 0) == 0 ? 'selected' : '' }}>
+                            Bronze
+                        </option>
+                        <option value="1" {{ old('nível_fidelidade', $dado->endereco->nível_fidelidade ?? 0) == 1 ? 'selected' : '' }}>
+                            Prata
+                        </option>
+                        <option value="2" {{ old('nível_fidelidade', $dado->endereco->nível_fidelidade ?? 0) == 2 ? 'selected' : '' }}>
+                            Ouro
+                        </option>
+                    </select>
+                </div>
             </div>
+                <div class="row">
+                <div class="col">
+                    <label class="form-label" for="imagem">Imagem</label>
+                    @php
+                        $nome_imagem = !empty($dado->imagem) ? $dado->imagem : 'sem_imagem.png';
+                    @endphp
+                    <img src="/storage/{{ $nome_imagem }}" class="rounded-circle" width="200px" height="200px" alt="imagem">
+                    <input type="file" name="imagem" class="form-control" value="{{ old('imagem', $dado->imagem ?? '') }}">
+                </div>
         </div>
         <div class="row">
             <div class="col">

@@ -13,13 +13,16 @@ return new class extends Migration
     {
         Schema::create('cliente', function (Blueprint $table) {
             $table->id();
-            $table->string('nome',100);
-            $table->string('cpf',16);
-            $table->string('telefone',20)->nullable();
-            $table->timestamps('email', 50);
-            $table->timestamps('endereco', 300);
-            $table->timestamps('preferenciadecompra', 500);
-            $table->timestamps('preferenciadecompra', 10);
+            $table->string('nome', 100);
+            $table->string('cpf', 16);
+            $table->string('telefone', 20)->nullable();
+            $table->string('email', 50);
+            $table->string('endereco', 300);
+            $table->string('preferenciadecompra', 500)->nullable();
+            $table->string('historicodevisitas', 10)->nullable();
+            $table->string('imagem')->nullable();
+            $table->unsignedBigInteger('categoria_id')->nullable();
+            $table->timestamps();
         });
     }
     /**
@@ -27,6 +30,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('parreiral_2');
+        Schema::dropIfExists('cliente');
     }
 };
