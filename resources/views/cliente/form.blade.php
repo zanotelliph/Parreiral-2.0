@@ -20,29 +20,37 @@
         <div class="row">
             <label for="id" class="form-label">Identificador Único</label>
             <input type="hidden" name="id" value="{{ $dado->id ?? '' }}">
-            <div class="col">
-                <label for="nome" class="form-label">Nome Completo</label>
-                <input type="text" class="form-control" name="nome" value="{{ old('nome', $dado->nome ?? '') }}">
+            <div class="col-md-6">
+                <label for="nome" class="form-label">Nome</label>
+                <input type="text" class="form-control" name="nome" value="{{ old('nome', $dado->nome ?? '') }}" required>
             </div>
-            <div class="col">
-                <label class="form-label" for="cpf">CPF</label>
-                <input type="text" class="form-control" name="cpf" value="{{ old('cpf', $dado->cpf ?? '') }}">
+            <div class="col-md-6">
+                <label class="form-label">Data de Nascimento</label>
+                <input type="date" class="form-control" name="data_nascimento" value="{{ old('data_nascimento', $dado->data_nascimento ?? '') }}">
             </div>
-            <div class="col">
+            <div class="col-md-6">
+                <label class="form-label">Email</label>
+                <input type="email" class="form-control" name="email" value="{{ old('email', $dado->email ?? '') }}" required>
+            </div>
+            <div class="col-md-6">
                 <label for="telefone" class="form-label">Telefone</label>
-                <input type="text" class="form-control" name="telefone"
-                    value="{{ old('telefone', $dado->telefone ?? '') }}">
+                <input type="text" class="form-control" name="telefone" value="{{ old('telefone', $dado->telefone ?? '') }}" required>
             </div>
-            <div class="col">
+            <div class="col-md-6">
+                <label class="form-label">CEP</label>
+                <input type="text" class="form-control" name="cep" value="{{ old('cep', $dado->cep ?? '') }}">
+            </div>
+            <div class="col-md-6">
                 <label class="form-label">Data de Cadastro</label>
-                <input type="date" class="form-control" name="data_cadastro"
-                    value="{{ old('data_cadastro', isset($dado->endereco->data_cadastro) ? \Carbon\Carbon::parse($dado->endereco->data_cadastro)->format('Y-m-d') : '') }}">
-                </div>
-            <div class="col">
-                    <label class="form-label">Email</label>
-                    <input type="email" class="form-control" name="email"
-                        value="{{ old('email', $dado->email ?? '') }}">
-                </div>
+                <input type="date" class="form-control" name="data_cadastro" value="{{ old('data_cadastro', $dado->data_cadastro ?? '') }}">
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">Status Financeiro</label>
+                <select class="form-select" name="status_financeiro">
+                    <option value="em dia" {{ old('status_financeiro', $dado->status_financeiro ?? 'em dia') == 'em dia' ? 'selected' : '' }}>Em dia</option>
+                    <option value="pendente" {{ old('status_financeiro', $dado->status_financeiro ?? 'em dia') == 'pendente' ? 'selected' : '' }}>Pendente</option>
+                </select>
+            </div>
                     {{-- ENDEREÇO --}}
         <div class="row">
             <div class="col">

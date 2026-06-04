@@ -13,10 +13,14 @@ class cliente extends Model
 
     protected $fillable = [
         'nome',
+        'data_nascimento',
         'email',
-        'endereco',
-        'cpf',
         'telefone',
+        'cep',
+        'data_cadastro',
+        'status_financeiro',
+        'cpf',
+        'endereco',
         'imagem',
         'preferenciadecompra',
         'historicodevisitas',

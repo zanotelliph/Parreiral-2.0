@@ -1,19 +1,29 @@
 <?php
+
 namespace App\Http\Controllers;
 
+use App\Models\Produto;
 use Illuminate\Http\Request;
-use App\Models\produto;
 
 class ProdutoController extends Controller
 {
-
-    function index()
+    public function index(Request $request)
     {
-        $dados = produto::all(); //select * from produto
+        $q = trim($request->input('q', ''));
 
-        return view('produto.list', [
-            'produto' => $produto
-        ]);
+        $produtos = Produto::query()
+            ->when($q !== '', function ($query) use ($q) {
+                $query->where(function ($sub) use ($q) {
+                    $sub->where('nome', 'like', "%{$q}%")
+                        ->orWhere('categoria_produto', 'like', "%{$q}%")
+                        ->orWhere('lote_produto', 'like', "%{$q}%")
+                        ->orWhere('tipo_uva', 'like', "%{$q}%");
+                });
+            })
+            ->latest()
+            ->get();
+
+        return view('produto.index', compact('produtos', 'q'));
     }
 
     public function create()
@@ -23,73 +33,53 @@ class ProdutoController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
-            'nome' => 'required|max:100',
-            'telefone' => 'required|max:20',
-            'email' => 'required|email|unique:produto,email',
-            'endereco' => 'required|max:200',
-            'preferenciasCompra' => 'nullable',
-            'historicoVisitas' => 'nullable',
-            'identificadorUnico' => 'required|unique:produto,identificadorUnico'
+        $data = $request->validate([
+            'nome' => 'required|string|max:100',
+            'categoria_produto' => 'nullable|string|max:100',
+            'tipo_uva' => 'nullable|string|max:100',
+            'lote' => 'nullable|string|max:100',
+            'lote_produto' => 'nullable|string|max:100',
+            'preco' => 'nullable|numeric',
+            'preco_produto' => 'nullable|numeric',
+            'desconto_promocao' => 'nullable|numeric|min:0|max:100',
+            'descricao' => 'nullable|string',
+            'quantidade_disponivel' => 'nullable|integer|min:0',
         ]);
 
-        produto::create([
-            'nome' => $request->nome,
-            'telefone' => $request->telefone,
-            'email' => $request->email,
-            'endereco' => $request->endereco,
-            'preferenciasCompra' => $request->preferenciasCompra,
-            'historicoVisitas' => $request->historicoVisitas,
-            'identificadorUnico' => $request->identificadorUnico
-        ]);
+        Produto::create($data);
 
-        return redirect('/produto');
+        return redirect()->route('produto.index')->with('success', 'Produto cadastrado com sucesso.');
     }
 
-    public function show(produto $produto)
+    public function edit(Produto $produto)
     {
-        return view('produto.show', [
-            'produto' => $produto
-        ]);
+        return view('produto.form', compact('produto'));
     }
 
-
-    public function edit(produto $produto)
+    public function update(Request $request, Produto $produto)
     {
-        return view('produto.form', [
-            'produto' => $produto
+        $data = $request->validate([
+            'nome' => 'required|string|max:100',
+            'categoria_produto' => 'nullable|string|max:100',
+            'tipo_uva' => 'nullable|string|max:100',
+            'lote' => 'nullable|string|max:100',
+            'lote_produto' => 'nullable|string|max:100',
+            'preco' => 'nullable|numeric',
+            'preco_produto' => 'nullable|numeric',
+            'desconto_promocao' => 'nullable|numeric|min:0|max:100',
+            'descricao' => 'nullable|string',
+            'quantidade_disponivel' => 'nullable|integer|min:0',
         ]);
+
+        $produto->update($data);
+
+        return redirect()->route('produto.index')->with('success', 'Produto atualizado com sucesso.');
     }
 
-    public function update(Request $request, produto $produto)
-    {
-        $request->validate([
-            'nome' => 'required|max:100',
-            'telefone' => 'required|max:20',
-            'email' => 'required|email|unique:produto,email,' . $produto->id,
-            'endereco' => 'required|max:200',
-            'preferenciasCompra' => 'nullable',
-            'historicoVisitas' => 'nullable',
-            'identificadorUnico' => 'required|unique:produto,identificadorUnico,' . $produto->id
-        ]);
-
-        $produto->update([
-            'nome' => $request->nome,
-            'telefone' => $request->telefone,
-            'email' => $request->email,
-            'endereco' => $request->endereco,
-            'preferenciasCompra' => $request->preferenciasCompra,
-            'historicoVisitas' => $request->historicoVisitas,
-            'identificadorUnico' => $request->identificadorUnico
-        ]);
-
-        return redirect('/produto');
-    }
-
-    public function destroy(produto $produto)
+    public function destroy(Produto $produto)
     {
         $produto->delete();
 
-        return redirect('/produto');
+        return redirect()->route('produto.index')->with('success', 'Produto removido com sucesso.');
     }
 }

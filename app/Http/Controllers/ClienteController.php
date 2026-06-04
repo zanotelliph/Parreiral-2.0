@@ -9,15 +9,22 @@ use App\Models\cliente;
 class clienteController extends Controller
 {
 
-    function index()
+    function index(Request $request)
     {
-        $dados = cliente::all(); //select * from cliente
+        $q = trim($request->input('q', ''));
 
-        // dd($dados);
-        //var_dump($dados);
-        //  exit;
+        $dados = cliente::query()
+            ->when($q !== '', function ($query) use ($q) {
+                $query->where(function ($sub) use ($q) {
+                    $sub->where('nome', 'like', "%{$q}%")
+                        ->orWhere('email', 'like', "%{$q}%")
+                        ->orWhere('telefone', 'like', "%{$q}%")
+                        ->orWhere('cpf', 'like', "%{$q}%");
+                });
+            })
+            ->get();
 
-        return view('cliente.list', ['dados' => $dados]);
+        return view('cliente.list', ['dados' => $dados, 'q' => $q]);
     }
 
     function create()
@@ -29,11 +36,15 @@ class clienteController extends Controller
     function validateRequest(Request $request)
     {
         $request->validate([
-            'nome' => 'required',
-            'telefone' => 'required',
-            'email'=> 'required',
-            'endereco'=> 'required',
-            'cpf' => 'required',
+            'nome' => 'required|string|max:100',
+            'data_nascimento' => 'nullable|date',
+            'email' => 'required|email',
+            'telefone' => 'required|string|max:20',
+            'cep' => 'nullable|string|max:10',
+            'data_cadastro' => 'nullable|date',
+            'status_financeiro' => 'nullable|string|max:30',
+            'cpf' => 'nullable|string|max:20',
+            'endereco' => 'nullable|string',
             'preferenciadecompra' => 'nullable|string',
             'historicodevisitas' => 'nullable|string',
             'id' => 'nullable|string|unique:clientes,id',
