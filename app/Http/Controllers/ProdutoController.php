@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Produto;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class ProdutoController extends Controller
 {
@@ -33,18 +34,11 @@ class ProdutoController extends Controller
 
     public function store(Request $request)
     {
-        $data = $request->validate([
-            'nome' => 'required|string|max:100',
-            'categoria_produto' => 'nullable|string|max:100',
-            'tipo_uva' => 'nullable|string|max:100',
-            'lote' => 'nullable|string|max:100',
-            'lote_produto' => 'nullable|string|max:100',
-            'preco' => 'nullable|numeric',
-            'preco_produto' => 'nullable|numeric',
-            'desconto_promocao' => 'nullable|numeric|min:0|max:100',
-            'descricao' => 'nullable|string',
-            'quantidade_disponivel' => 'nullable|integer|min:0',
-        ]);
+        $data = $this->validatedData($request);
+
+        if ($request->hasFile('imagem')) {
+            $data['imagem'] = $request->file('imagem')->store('imagem/produto', 'public');
+        }
 
         Produto::create($data);
 
@@ -58,7 +52,34 @@ class ProdutoController extends Controller
 
     public function update(Request $request, Produto $produto)
     {
-        $data = $request->validate([
+        $data = $this->validatedData($request);
+
+        if ($request->hasFile('imagem')) {
+            if ($produto->imagem) {
+                Storage::disk('public')->delete($produto->imagem);
+            }
+            $data['imagem'] = $request->file('imagem')->store('imagem/produto', 'public');
+        }
+
+        $produto->update($data);
+
+        return redirect()->route('produto.index')->with('success', 'Produto atualizado com sucesso.');
+    }
+
+    public function destroy(Produto $produto)
+    {
+        if ($produto->imagem) {
+            Storage::disk('public')->delete($produto->imagem);
+        }
+
+        $produto->delete();
+
+        return redirect()->route('produto.index')->with('success', 'Produto removido com sucesso.');
+    }
+
+    private function validatedData(Request $request): array
+    {
+        return $request->validate([
             'nome' => 'required|string|max:100',
             'categoria_produto' => 'nullable|string|max:100',
             'tipo_uva' => 'nullable|string|max:100',
@@ -69,17 +90,7 @@ class ProdutoController extends Controller
             'desconto_promocao' => 'nullable|numeric|min:0|max:100',
             'descricao' => 'nullable|string',
             'quantidade_disponivel' => 'nullable|integer|min:0',
+            'imagem' => 'nullable|image|mimes:png,jpg,jpeg|max:5120',
         ]);
-
-        $produto->update($data);
-
-        return redirect()->route('produto.index')->with('success', 'Produto atualizado com sucesso.');
-    }
-
-    public function destroy(Produto $produto)
-    {
-        $produto->delete();
-
-        return redirect()->route('produto.index')->with('success', 'Produto removido com sucesso.');
     }
 }

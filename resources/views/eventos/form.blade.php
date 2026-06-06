@@ -1,7 +1,11 @@
 @extends('main')
 @section('titulo', 'Evento')
 @section('conteudo')
-<h3>{{ isset($evento) ? 'Editar evento' : 'Novo evento' }}</h3>
+@include('partials.page-header', [
+    'title' => isset($evento) ? 'Editar evento' : 'Novo evento',
+    'subtitle' => 'Degustações e experiências no parreiral',
+])
+<div class="content-panel">
 <form method="POST" action="{{ isset($evento) ? route('eventos.update', $evento) : route('eventos.store') }}">
   @csrf
   @if(isset($evento)) @method('PUT') @endif
@@ -22,4 +26,5 @@
     <a class="btn btn-secondary" href="{{ route('eventos.index') }}">Voltar</a>
   </div>
 </form>
+</div>
 @endsection

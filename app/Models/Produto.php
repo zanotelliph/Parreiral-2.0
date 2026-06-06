@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Produto extends Model
 {
@@ -21,6 +22,19 @@ class Produto extends Model
         'preco_produto',
         'desconto_promocao',
         'descricao',
+        'imagem',
         'quantidade_disponivel',
     ];
+
+    public function compras(): HasMany
+    {
+        return $this->hasMany(CompraProduto::class);
+    }
+
+    public function getImagemUrlAttribute(): string
+    {
+        return $this->imagem
+            ? asset('storage/' . $this->imagem)
+            : asset('images/sem-imagem.svg');
+    }
 }

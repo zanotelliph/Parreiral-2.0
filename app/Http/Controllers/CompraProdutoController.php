@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Cliente;
 use App\Models\CompraProduto;
+use App\Models\Produto;
 use Illuminate\Http\Request;
 
 class CompraProdutoController extends Controller
@@ -12,11 +14,13 @@ class CompraProdutoController extends Controller
         $q = trim($request->input('q', ''));
 
         $compras = CompraProduto::query()
+            ->with(['cliente', 'produto'])
             ->when($q !== '', function ($query) use ($q) {
                 $query->where(function ($sub) use ($q) {
                     $sub->where('fornecedor', 'like', "%{$q}%")
                         ->orWhere('produto_id', 'like', "%{$q}%")
-                        ->orWhere('observacao', 'like', "%{$q}%");
+                        ->orWhere('observacao', 'like', "%{$q}%")
+                        ->orWhereHas('cliente', fn ($c) => $c->where('nome', 'like', "%{$q}%"));
                 });
             })
             ->latest()
@@ -27,13 +31,17 @@ class CompraProdutoController extends Controller
 
     public function create()
     {
-        return view('compras-produtos.form');
+        $clientes = Cliente::orderBy('nome')->get();
+        $produtos = Produto::orderBy('nome')->get();
+
+        return view('compras-produtos.form', compact('clientes', 'produtos'));
     }
 
     public function store(Request $request)
     {
         $data = $request->validate([
-            'produto_id' => 'required|integer',
+            'cliente_id' => 'required|exists:cliente,id',
+            'produto_id' => 'required|exists:produtos,id',
             'fornecedor' => 'required',
             'quantidade' => 'required|integer|min:1',
             'valor_total' => 'required|numeric',
@@ -48,13 +56,17 @@ class CompraProdutoController extends Controller
 
     public function edit(CompraProduto $compraProduto)
     {
-        return view('compras-produtos.form', compact('compraProduto'));
+        $clientes = Cliente::orderBy('nome')->get();
+        $produtos = Produto::orderBy('nome')->get();
+
+        return view('compras-produtos.form', compact('compraProduto', 'clientes', 'produtos'));
     }
 
     public function update(Request $request, CompraProduto $compraProduto)
     {
         $data = $request->validate([
-            'produto_id' => 'required|integer',
+            'cliente_id' => 'required|exists:cliente,id',
+            'produto_id' => 'required|exists:produtos,id',
             'fornecedor' => 'required',
             'quantidade' => 'required|integer|min:1',
             'valor_total' => 'required|numeric',
