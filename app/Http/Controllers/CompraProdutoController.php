@@ -4,26 +4,18 @@ namespace App\Http\Controllers;
 
 use App\Models\CompraProduto;
 use Illuminate\Http\Request;
+use App\Charts\ProdutoMaisComprado;
 
 class CompraProdutoController extends Controller
 {
-    public function index(Request $request)
+    public function index()
     {
-        $q = trim($request->input('q', ''));
+        $compras = CompraProduto::all();
 
-        $compras = CompraProduto::query()
-            ->when($q !== '', function ($query) use ($q) {
-                $query->where(function ($sub) use ($q) {
-                    $sub->where('fornecedor', 'like', "%{$q}%")
-                        ->orWhere('produto_id', 'like', "%{$q}%")
-                        ->orWhere('observacao', 'like', "%{$q}%");
-                });
-            })
-            ->latest()
-            ->get();
-
-        return view('compras-produtos.index', compact('compras', 'q'));
-    }
+        return view('compras-produtos.index', [
+        'compras' => $compras,
+    ]);
+}
 
     public function create()
     {
@@ -34,11 +26,15 @@ class CompraProdutoController extends Controller
     {
         $data = $request->validate([
             'produto_id' => 'required|integer',
-            'fornecedor' => 'required',
-            'quantidade' => 'required|integer|min:1',
+            'item_compra' => 'required',
+            'descrição' => 'nullable',
+            'custo_compra' => 'required|numeric',
+            'desconto' => 'nullable|numeric',
+            'parcelas' => 'required|integer|min:1',
+            'forma_pagamento' => 'required|string',
             'valor_total' => 'required|numeric',
             'data_compra' => 'required|date',
-            'observacao' => 'nullable',
+            
         ]);
 
         CompraProduto::create($data);
@@ -53,14 +49,21 @@ class CompraProdutoController extends Controller
 
     public function update(Request $request, CompraProduto $compraProduto)
     {
+        dd($request->all(), $compraProduto);
         $data = $request->validate([
             'produto_id' => 'required|integer',
-            'fornecedor' => 'required',
-            'quantidade' => 'required|integer|min:1',
+            'item_compra' => 'required',
+            'descrição' => 'nullable',
+            'custo_compra' => 'required|numeric',
+            'desconto' => 'nullable|numeric',
+            'parcelas' => 'required|integer|min:1',
+            'forma_pagamento' => 'required|string',
             'valor_total' => 'required|numeric',
             'data_compra' => 'required|date',
-            'observacao' => 'nullable',
         ]);
+        $data['desconto'] = $request->filled('desconto')
+    ? (int) round((float) $data['desconto'] * 100)
+    : 0;
 
         $compraProduto->update($data);
 
@@ -73,4 +76,9 @@ class CompraProdutoController extends Controller
 
         return redirect()->route('compras-produtos.index')->with('success', 'Compra removida com sucesso.');
     }
+       function chart(ProdutoMaisComprado $chart)
+    {
+        return view('compras-produtos.chart', ['chart' => $chart->build()]);
+    }
 }
+

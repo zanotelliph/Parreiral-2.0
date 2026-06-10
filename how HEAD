@@ -1,0 +1,72 @@
+[33mcommit ca41b19c2dd4e338dd3ed9d9e2ddc6abad343d71[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m)[m
+Author: Karoline <karolinepcgomes5@gmail.com>
+Date:   Fri Jun 5 08:52:05 2026 -0300
+
+    Sua mensagem clara e objetiva aqui
+
+[33mcommit ebb645ae7db61c11b5b3e8e4fcea400daaaee1fa[m
+Author: zanotelliph <pedrozanotelli5@gmail.com>
+Date:   Thu Jun 4 16:57:59 2026 -0300
+
+    Criação dos Cruds
+
+[33mcommit cd9fd8075953191fa96f65c253526225aa8c6f04[m
+Author: Your Name <you@example.com>
+Date:   Wed Jun 3 17:21:22 2026 -0300
+
+    produto
+
+[33mcommit 6caf5bf1ad1eff270d58dec8af41e6ed2b35a8bc[m
+Author: karoline <karolinepcgomes5@gmail.com>
+Date:   Fri May 29 17:19:59 2026 -0300
+
+    mvc do cliente
+
+[33mcommit 91f0a8a1022b13c2913329035e67e59ae6cea836[m
+Merge: 4dfa4de 32b72d5
+Author: karoline <karolinepcgomes5@gmail.com>
+Date:   Fri May 29 16:35:10 2026 -0300
+
+    Merge branch 'main' of https://github.com/zanotelliph/Parreiral-2.0
+
+[33mcommit 4dfa4def0a06de7bd0ab4c30863138761f99734c[m
+Author: karoline <karolinepcgomes5@gmail.com>
+Date:   Fri May 29 16:34:57 2026 -0300
+
+    cliente
+
+[33mcommit 32b72d552eefda2bb210fe42df8e194e2bb1b863[m
+Author: zanotelliph <pedrozanotelli5@gmail.com>
+Date:   Fri May 29 16:14:34 2026 -0300
+
+    env update
+
+[33mcommit 341edd8ac382612cc698d04fbce5363ba0458bb9[m
+Author: karoline <karolinepcgomes5@gmail.com>
+Date:   Fri May 29 16:10:47 2026 -0300
+
+    env
+
+[33mcommit 7a58b24772035244d3dc6fcc8dc21ebba9da9086[m
+Author: karoline <karolinepcgomes5@gmail.com>
+Date:   Fri May 29 16:09:42 2026 -0300
+
+    up projeto
+
+[33mcommit 1af944a6f332c355b42e346e71583e802a6a849d[m
+Author: zanotelliph <pedrozanotelli5@gmail.com>
+Date:   Wed May 27 15:55:49 2026 -0300
+
+    Delete Total
+
+[33mcommit 61a558a255117338dadf386ed87140a4ae471863[m
+Author: zanotelliph <pedrozanotelli5@gmail.com>
+Date:   Wed May 27 15:47:33 2026 -0300
+
+    1° Commit
+
+[33mcommit bd82bee7783344d7c5a5d78adc0f87cfb62265ce[m
+Author: zanotelliph <168486465+zanotelliph@users.noreply.github.com>
+Date:   Fri May 15 16:28:58 2026 -0300
+
+    Initial commit

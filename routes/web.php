@@ -7,6 +7,8 @@ use App\Http\Controllers\ReservaEventoController;
 use App\Http\Controllers\CompraProdutoController;
 use App\Http\Controllers\EstoqueController;
 use App\Http\Controllers\EventoController;
+//use App\Http\Controllers\DashboardController;
+use App\Charts\ProdutoMaisComprado;
 
 Route::get('/', function () {
     return view('dashboard');
@@ -25,3 +27,13 @@ Route::resource('reservas-eventos', ReservaEventoController::class);
 Route::resource('eventos', EventoController::class);
 Route::resource('compras-produtos', CompraProdutoController::class);
 Route::resource('estoques', EstoqueController::class);
+// Route::get('/dashboard', [DashboardController::class, 'index']);
+// Route::get('/', function (ProdutoMaisComprado $chart) {
+//     return view('dashboard', [
+//         'chart' => $chart->build()
+//     ]);
+// });
+Route::get(
+    'compras-produtos/chart',
+    [CompraProdutoController::class, 'chart']
+)->name('compras-produtos.chart');

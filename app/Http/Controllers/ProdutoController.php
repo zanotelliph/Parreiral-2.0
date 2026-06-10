@@ -36,14 +36,11 @@ class ProdutoController extends Controller
         $data = $request->validate([
             'nome' => 'required|string|max:100',
             'categoria_produto' => 'nullable|string|max:100',
-            'tipo_uva' => 'nullable|string|max:100',
-            'lote' => 'nullable|string|max:100',
-            'lote_produto' => 'nullable|string|max:100',
-            'preco' => 'nullable|numeric',
-            'preco_produto' => 'nullable|numeric',
-            'desconto_promocao' => 'nullable|numeric|min:0|max:100',
-            'descricao' => 'nullable|string',
             'quantidade_disponivel' => 'nullable|integer|min:0',
+            'tipo_uva' => 'nullable|string|max:100',
+            'valor_unitario' => 'nullable|numeric',
+            'descricao' => 'nullable|string',
+            
         ]);
 
         Produto::create($data);
@@ -61,14 +58,10 @@ class ProdutoController extends Controller
         $data = $request->validate([
             'nome' => 'required|string|max:100',
             'categoria_produto' => 'nullable|string|max:100',
-            'tipo_uva' => 'nullable|string|max:100',
-            'lote' => 'nullable|string|max:100',
-            'lote_produto' => 'nullable|string|max:100',
-            'preco' => 'nullable|numeric',
-            'preco_produto' => 'nullable|numeric',
-            'desconto_promocao' => 'nullable|numeric|min:0|max:100',
-            'descricao' => 'nullable|string',
             'quantidade_disponivel' => 'nullable|integer|min:0',
+            'tipo_uva' => 'nullable|string|max:100',
+            'valor_unitario' => 'nullable|numeric',
+            'descricao' => 'nullable|string',
         ]);
 
         $produto->update($data);

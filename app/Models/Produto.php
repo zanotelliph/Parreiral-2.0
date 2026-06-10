@@ -15,12 +15,8 @@ class Produto extends Model
         'nome',
         'categoria_produto',
         'tipo_uva',
-        'lote',
-        'lote_produto',
-        'preco',
-        'preco_produto',
-        'desconto_promocao',
         'descricao',
         'quantidade_disponivel',
+        'valor_unitario',
     ];
 }

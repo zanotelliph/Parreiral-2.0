@@ -11,16 +11,17 @@
 </form>
 @if(session('success'))<div class="alert alert-success">{{ session('success') }}</div>@endif
 <table class="table table-bordered">
-  <thead><tr><th>ID</th><th>Nome</th><th>Categoria</th><th>Lote</th><th>Preço</th><th>Desconto</th><th>Ações</th></tr></thead>
+  <thead><tr><th>ID</th><th>Nome</th><th>Categoria</th><th>Tipo</th><th>Quantidade Disponível</th><th>Preço Unitário</th><th>Descrição</th></tr></thead>
   <tbody>
   @foreach($produtos as $produto)
     <tr>
       <td>{{ $produto->id }}</td>
       <td>{{ $produto->nome }}</td>
-      <td>{{ $produto->categoria_produto ?? $produto->tipo_uva }}</td>
-      <td>{{ $produto->lote_produto ?? $produto->lote }}</td>
-      <td>R$ {{ number_format($produto->preco_produto ?? $produto->preco, 2, ',', '.') }}</td>
-      <td>{{ number_format($produto->desconto_promocao ?? 0, 2, ',', '.') }}%</td>
+      <td>{{ $produto->categoria_produto ?? $produto->tipo }}</td>
+      <td>{{ $produto->quantidade_disponivel ?? 0 }}</td>
+      <td>{{ $produto->descricao ?? '' }}</td>
+      <td>R$ {{ number_format($produto->valor_unitario ?? 0, 2, ',', '.') }}</td>
+      <td>{{ $produto->tipo_uva ?? '' }}</td>
       <td>
         <a class="btn btn-sm btn-primary" href="{{ route('produto.edit', $produto) }}">Editar</a>
         <form class="d-inline" method="POST" action="{{ route('produto.destroy', $produto) }}" onsubmit="return confirm('Excluir?')">
