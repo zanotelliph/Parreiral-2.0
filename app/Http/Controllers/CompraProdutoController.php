@@ -49,7 +49,6 @@ class CompraProdutoController extends Controller
 
     public function update(Request $request, CompraProduto $compraProduto)
     {
-        dd($request->all(), $compraProduto);
         $data = $request->validate([
             'produto_id' => 'required|integer',
             'item_compra' => 'required',
@@ -61,9 +60,6 @@ class CompraProdutoController extends Controller
             'valor_total' => 'required|numeric',
             'data_compra' => 'required|date',
         ]);
-        $data['desconto'] = $request->filled('desconto')
-    ? (int) round((float) $data['desconto'] * 100)
-    : 0;
 
         $compraProduto->update($data);
 

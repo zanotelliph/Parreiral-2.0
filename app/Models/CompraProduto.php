@@ -15,18 +15,11 @@ class CompraProduto extends Model
 
     protected $fillable = [
         'produto_id',
-        'item_compra',
+        'fornecedor',
         'quantidade',
         'valor_total',
         'data_compra',
-        'descrição',
-        'custo_compra',
-        'desconto',
-        'forma_pagamento',
-        'data_pagamento',
-        'data_vencimento',
-        'parcelas',
-        'status'
+        'observacao',
     ];
     public function produto()
 {
