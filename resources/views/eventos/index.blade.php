@@ -1,6 +1,7 @@
 @extends('main')
 @section('titulo', 'Eventos')
 @section('conteudo')
+<<<<<<< HEAD
 <div class="d-flex justify-content-between align-items-center mb-3">
   <h3>Eventos</h3>
 <div class="mb-3">
@@ -10,42 +11,53 @@
 </a>
 </div>
   <a href="{{ route('eventos.create') }}" class="btn btn-success">Novo evento</a>
+=======
+
+@include('partials.page-header', [
+    'title' => 'Eventos',
+    'subtitle' => 'Degustações, colheitas e experiências no parreiral',
+])
+
+<div class="content-panel">
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-2 mb-4">
+        <form class="row g-2 flex-grow-1" method="GET" action="{{ route('eventos.index') }}">
+            <div class="col-md-10"><input type="search" name="q" value="{{ $q ?? '' }}" class="form-control" placeholder="Pesquisar nome ou descrição do evento"></div>
+            <div class="col-md-2"><button class="btn btn-primary w-100">Buscar</button></div>
+        </form>
+        <a href="{{ route('eventos.create') }}" class="btn btn-success text-nowrap">Novo evento</a>
+    </div>
+
+    @if(session('success'))<div class="alert alert-success">{{ session('success') }}</div>@endif
+
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover mb-0">
+            <thead>
+                <tr>
+                    <th>ID</th><th>Nome</th><th>Início</th><th>Término</th>
+                    <th>Limite</th><th>Valor 1</th><th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach($eventos as $item)
+                    <tr>
+                        <td>{{ $item->id }}</td>
+                        <td>{{ $item->nome_evento }}</td>
+                        <td>{{ $item->data_inicio }} {{ $item->hora_inicio }}</td>
+                        <td>{{ $item->data_fim }} {{ $item->hora_fim }}</td>
+                        <td>{{ $item->limite_pessoas }}</td>
+                        <td>R$ {{ number_format($item->valor_ingresso_1 ?? 0, 2, ',', '.') }}</td>
+                        <td>
+                            <a class="btn btn-sm btn-primary" href="{{ route('eventos.edit', $item) }}">Editar</a>
+                            <form class="d-inline" method="POST" action="{{ route('eventos.destroy', $item) }}" onsubmit="return confirm('Excluir?')">
+                                @csrf @method('DELETE')
+                                <button class="btn btn-sm btn-danger">Excluir</button>
+                            </form>
+                        </td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+    </div>
+>>>>>>> 19262168641d0837dcd9295cfe234fbe446609f2
 </div>
-<form class="row g-2 mb-3" method="GET" action="{{ route('eventos.index') }}">
-  <div class="col-md-10"><input type="search" name="q" value="{{ $q ?? '' }}" class="form-control" placeholder="Pesquisar nome ou descrição do evento"></div>
-  <div class="col-md-2"><button class="btn btn-primary w-100">Buscar</button></div>
-</form>
-@if(session('success'))<div class="alert alert-success">{{ session('success') }}</div>@endif
-<table class="table table-bordered">
-  <thead>
-    <tr>
-      <th>ID</th>
-      <th>Nome</th>
-      <th>Início</th>
-      <th>Término</th>
-      <th>Limite</th>
-      <th>Valor 1</th>
-      <th>Ações</th>
-    </tr>
-  </thead>
-  <tbody>
-    @foreach($eventos as $item)
-      <tr>
-        <td>{{ $item->id }}</td>
-        <td>{{ $item->nome_evento }}</td>
-        <td>{{ $item->data_inicio }} {{ $item->hora_inicio }}</td>
-        <td>{{ $item->data_fim }} {{ $item->hora_fim }}</td>
-        <td>{{ $item->limite_pessoas }}</td>
-        <td>R$ {{ number_format($item->valor_ingresso_1 ?? 0, 2, ',', '.') }}</td>
-        <td>
-          <a class="btn btn-sm btn-primary" href="{{ route('eventos.edit', $item) }}">Editar</a>
-          <form class="d-inline" method="POST" action="{{ route('eventos.destroy', $item) }}" onsubmit="return confirm('Excluir?')">
-            @csrf @method('DELETE')
-            <button class="btn btn-sm btn-danger">Excluir</button>
-          </form>
-        </td>
-      </tr>
-    @endforeach
-  </tbody>
-</table>
 @endsection

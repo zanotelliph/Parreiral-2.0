@@ -2,7 +2,12 @@
 @section('titulo', 'Formulário cliente')
 @section('conteudo')
 
-    <h4>Cadastro de Clientes</h4>
+@include('partials.page-header', [
+    'title' => !empty($dado->id) ? 'Editar cliente' : 'Novo cliente',
+    'subtitle' => 'Cadastro de clientes da vinícola',
+])
+
+<div class="content-panel">
 
     @php
         if (!empty($dado->id)) {
@@ -18,8 +23,25 @@
             @method('PUT')
         @endif
         <div class="row">
-            <label for="id" class="form-label">Identificador Único</label>
-            <input type="hidden" name="id" value="{{ $dado->id ?? '' }}">
+            <div class="col-md-4">
+                <label for="codigo_externo" class="form-label">Identificador Único</label>
+                <input type="text" class="form-control" name="codigo_externo"
+                    value="{{ old('codigo_externo', optional($dado ?? null)->identificador?->codigo_externo) }}"
+                    placeholder="Ex: CLI-0001">
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">Tipo de documento</label>
+                <select class="form-select" name="tipo_documento">
+                    <option value="cpf" @selected(old('tipo_documento', optional($dado ?? null)->identificador?->tipo_documento ?? 'cpf') === 'cpf')>CPF</option>
+                    <option value="rg" @selected(old('tipo_documento', optional($dado ?? null)->identificador?->tipo_documento) === 'rg')>RG</option>
+                    <option value="outro" @selected(old('tipo_documento', optional($dado ?? null)->identificador?->tipo_documento) === 'outro')>Outro</option>
+                </select>
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">Documento</label>
+                <input type="text" class="form-control" name="documento"
+                    value="{{ old('documento', optional($dado ?? null)->identificador?->documento ?? optional($dado ?? null)->cpf) }}">
+            </div>
             <div class="col-md-6">
                 <label for="nome" class="form-label">Nome</label>
                 <input type="text" class="form-control" name="nome" value="{{ old('nome', $dado->nome ?? '') }}" required>
@@ -172,16 +194,15 @@
                     </select>
                 </div>
             </div>
-                <div class="row">
-                <div class="col">
-                    <label class="form-label" for="imagem">Imagem</label>
-                    @php
-                        $nome_imagem = !empty($dado->imagem) ? $dado->imagem : 'sem_imagem.png';
-                    @endphp
-                    <img src="/storage/{{ $nome_imagem }}" class="rounded-circle" width="200px" height="200px" alt="imagem">
-                    <input type="file" name="imagem" class="form-control" value="{{ old('imagem', $dado->imagem ?? '') }}">
+            <div class="row">
+                <div class="col-md-6">
+                    @include('partials.campo-imagem', [
+                        'imagemAtual' => optional($dado ?? null)->imagem,
+                        'previewId' => 'preview-cliente',
+                        'label' => 'Foto do cliente',
+                    ])
                 </div>
-        </div>
+            </div>
         <div class="row">
             <div class="col">
                 <button type="submit" class="btn btn-success">Salvar</button>
@@ -190,4 +211,5 @@
         </div>
     </form>
 
+</div>
 @stop

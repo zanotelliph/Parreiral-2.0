@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Barryvdh\DomPDF\Facade\Pdf;
 use App\Models\Produto;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class ProdutoController extends Controller
 {
@@ -40,6 +41,7 @@ class ProdutoController extends Controller
 
     public function store(Request $request)
     {
+<<<<<<< HEAD
         $data = $request->validate([
             'nome' => 'required|string|max:100',
             'categoria_produto' => 'nullable|string|max:100',
@@ -52,6 +54,13 @@ class ProdutoController extends Controller
             'quantidade_disponivel' => 'nullable|integer|min:0',
             'descricao' => 'nullable|string',
         ]);
+=======
+        $data = $this->validatedData($request);
+
+        if ($request->hasFile('imagem')) {
+            $data['imagem'] = $request->file('imagem')->store('imagem/produto', 'public');
+        }
+>>>>>>> 19262168641d0837dcd9295cfe234fbe446609f2
 
         Produto::create($data);
 
@@ -69,7 +78,34 @@ class ProdutoController extends Controller
 
     public function update(Request $request, Produto $produto)
     {
-        $data = $request->validate([
+        $data = $this->validatedData($request);
+
+        if ($request->hasFile('imagem')) {
+            if ($produto->imagem) {
+                Storage::disk('public')->delete($produto->imagem);
+            }
+            $data['imagem'] = $request->file('imagem')->store('imagem/produto', 'public');
+        }
+
+        $produto->update($data);
+
+        return redirect()->route('produto.index')->with('success', 'Produto atualizado com sucesso.');
+    }
+
+    public function destroy(Produto $produto)
+    {
+        if ($produto->imagem) {
+            Storage::disk('public')->delete($produto->imagem);
+        }
+
+        $produto->delete();
+
+        return redirect()->route('produto.index')->with('success', 'Produto removido com sucesso.');
+    }
+
+    private function validatedData(Request $request): array
+    {
+        return $request->validate([
             'nome' => 'required|string|max:100',
             'categoria_produto' => 'nullable|string|max:100',
             'tipo_uva' => 'nullable|string|max:100',
@@ -79,6 +115,7 @@ class ProdutoController extends Controller
             'preco_produto' => 'nullable|numeric',
             'desconto_promocao' => 'nullable|numeric',
             'quantidade_disponivel' => 'nullable|integer|min:0',
+<<<<<<< HEAD
             'descricao' => 'nullable|string',
         ]);
 
@@ -99,6 +136,10 @@ class ProdutoController extends Controller
         return redirect()
             ->route('produto.index')
             ->with('success', 'Produto removido com sucesso.');
+=======
+            'imagem' => 'nullable|image|mimes:png,jpg,jpeg|max:5120',
+        ]);
+>>>>>>> 19262168641d0837dcd9295cfe234fbe446609f2
     }
   public function pdf()
 {
