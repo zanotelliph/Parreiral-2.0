@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use Barryvdh\DomPDF\Facade\Pdf;
 use App\Models\Evento;
 use Illuminate\Http\Request;
 
@@ -80,4 +80,18 @@ class EventoController extends Controller
 
         return redirect()->route('eventos.index')->with('success', 'Evento removido com sucesso.');
     }
+
+    public function pdf()
+    {
+        $eventos = Evento::all();
+
+        $pdf = Pdf::loadView('eventos.pdf', compact('eventos'));
+        $content = $pdf->output();
+
+        return response($content, 200)
+            ->header('Content-Type', 'application/pdf')
+            ->header('Content-Disposition', 'attachment; filename="eventos.pdf"');
+    }
 }
+
+

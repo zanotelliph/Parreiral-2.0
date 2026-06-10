@@ -4,10 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\ReservaEvento;
 use Illuminate\Http\Request;
+use App\Charts\EventoMaisReservado;
 
 class ReservaEventoController extends Controller
 {
-    public function index(Request $request)
+    public function index(Request $request, EventoMaisReservado $chart)
     {
         $q = trim($request->input('q', ''));
 
@@ -24,7 +25,11 @@ class ReservaEventoController extends Controller
             ->latest()
             ->get();
 
-        return view('reservas-eventos.index', compact('reservas', 'q'));
+        return view('reservas-eventos.index', [
+            'reservas' => $reservas,
+            'q' => $q,
+            'chart' => $chart->build(),
+        ]);
     }
 
     public function create()
@@ -83,4 +88,10 @@ class ReservaEventoController extends Controller
 
         return redirect()->route('reservas-eventos.index')->with('success', 'Reserva removida com sucesso.');
     }
+    public function chart(EventoMaisReservado $chart)
+{
+    return view('reservas-eventos.chart', [
+        'chart' => $chart->build()
+    ]);
 }
+} 

@@ -15,13 +15,52 @@
   <div class="col-md-10"><input type="search" name="q" value="{{ $q ?? '' }}" class="form-control" placeholder="Pesquisar fornecedor, produto ou observação"></div>
   <div class="col-md-2"><button class="btn btn-primary w-100">Buscar</button></div>
 </form>
+
 @if(session('success'))<div class="alert alert-success">{{ session('success') }}</div>@endif
-<table class="table table-bordered"><thead><tr><th>Produto</th>
-<th>Quantidade</th><th>Custo de compra</th>
-<th>Forma de Pagamento</th><th>Parcelas</th>
-<th>Desconto</th><th>Valor Total</th>
-<th>Data</th><th>Descrição</th>
-</tr></thead><tbody>@foreach($compras as $item)<tr><td>{{ $item->id }}</td><td>{{ $item->produto_id }}</td><td>{{ $item->fornecedor }}</td><td>{{ $item->quantidade }}</td><td>R$ {{ number_format($item->valor_total, 2, ',', '.') }}</td><td>{{ $item->data_compra }}</td><td><a class="btn btn-sm btn-primary" href="{{ route('compras-produtos.edit', $item) }}">Editar</a><form class="d-inline" method="POST" action="{{ route('compras-produtos.destroy', $item) }}" onsubmit="return confirm('Excluir?')">@csrf @method('DELETE')<button class="btn btn-sm btn-danger">Excluir</button></form></td></tr>@endforeach</tbody></table>
+<table class="table table-bordered">
+<thead>
+<tr>
+    <th>ID</th>
+    <th>Produto</th>
+    <th>Item</th>
+    <th>Custo de compra</th>
+    <th>Forma de Pagamento</th>
+    <th>Parcelas</th>
+    <th>Desconto</th>
+    <th>Valor Total</th>
+    <th>Data</th>
+    <th>Descrição</th>
+    <th>Ações</th>
+</tr>
+</thead>
+<tbody>
+@foreach($compras as $item)
+<tr>
+    <td>{{ $item->id }}</td>
+    <td>{{ $item->produto_id }}</td>
+    <td>{{ $item->item_compra }}</td>
+    <td>R$ {{ number_format($item->custo_compra, 2, ',', '.') }}</td>
+    <td>{{ $item->forma_pagamento }}</td>
+    <td>{{ $item->parcelas }}</td>
+    <td>{{ $item->desconto }}</td>
+    <td>R$ {{ number_format($item->valor_total, 2, ',', '.') }}</td>
+    <td>{{ $item->data_compra }}</td>
+    <td>{{ $item->descricao }}</td>
+    <td>
+        <a class="btn btn-sm btn-primary" href="{{ route('compras-produtos.edit', $item) }}">Editar</a>
+
+        <form class="d-inline" method="POST"
+              action="{{ route('compras-produtos.destroy', $item) }}"
+              onsubmit="return confirm('Excluir?')">
+            @csrf
+            @method('DELETE')
+            <button class="btn btn-sm btn-danger">Excluir</button>
+        </form>
+    </td>
+</tr>
+@endforeach
+</tbody>
+</table>
 @if(isset($chart))
     <script src="{{ $chart->cdn() }}"></script>
     {{ $chart->script() }}

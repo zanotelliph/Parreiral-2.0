@@ -3,6 +3,7 @@
 namespace App\Charts;
 
 use ArielMejiaDev\LarapexCharts\LarapexChart;
+use Illuminate\Support\Facades\DB;
 
 class EventoMaisReservado
 {
@@ -15,23 +16,26 @@ class EventoMaisReservado
 
     public function build(): \ArielMejiaDev\LarapexCharts\PieChart
     {
-        $produtoPorCompra = DB::table('reserva_evento')
-             ->join('evento', 'reserva_evento.evento_id', '=', 'evento.id')
-             ->select('evento.nome',DB::raw('COUNT(*) as total'))
-             ->groupBy('evento.nome')
-             ->orderByDesc('total');
-        $tipo_reserva = [];
-        $quantidade = [];
-        foreach ($produtoPorCompra as $item) {
-             $tipo_reserva[]=$item->nome;
-             $quantidade[]= $item->total;
+        $dados = DB::table('reservas_eventos')
+            ->select(
+                'evento',
+                DB::raw('COUNT(*) as total')
+            )
+            ->groupBy('evento')
+            ->orderByDesc('total')
+            ->get();
+
+        $eventos = [];
+        $quantidades = [];
+
+        foreach ($dados as $item) {
+            $eventos[] = $item->evento;
+            $quantidades[] = $item->total;
         }
 
-            
         return $this->chart->pieChart()
-            ->setTitle('Evento Mais Reservado')
-            ->setSubtitle('Season 2021.')
-            ->addData($quantidade)
-            ->setLabels($tipo_reserva);
+            ->setTitle('Eventos Mais Reservados')
+            ->addData($quantidades)
+            ->setLabels($eventos);
     }
 }

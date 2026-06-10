@@ -12,22 +12,41 @@ class cliente extends Model
     protected $table = 'cliente';
 
     protected $fillable = [
-        'nome',
-        'data_nascimento',
-        'email',
-        'telefone',
-        'cep',
-        'data_cadastro',
-        'status_financeiro',
-        'cpf',
-        'endereco',
-        'imagem',
-        'preferenciadecompra',
-        'historicodevisitas',
-        'id',
-    ];
-    public function categoria()
-    {
-        return $this->belongsTo(Categoriacliente::class, 'categoria_id');
-    }
+    'nome',
+    'cpf',
+    'telefone',
+    'email',
+    'data_nascimento',
+    'cep',
+    'data_cadastro',
+    'status_financeiro',
+    'endereco',
+
+    'rua',
+    'numero',
+    'complemento',
+    'bairro',
+    'cidade',
+    'estado',
+
+    'preferenciadecompra',
+    'observacoes',
+
+    'numero_visitas',
+    'data_ultima_visita',
+    'cliente_fidelizado',
+    'nivel_fidelidade',
+
+    'historicodevisitas',
+    'imagem',
+    'categoria_id'
+];
+    function edit($id)
+{
+    $dado = cliente::find($id);
+
+    return view('cliente.form', [
+        'dado' => $dado
+    ]);
+}
 }

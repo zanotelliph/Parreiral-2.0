@@ -159,14 +159,14 @@
                 </div>
                 <div class="col">
                     <label class="form-label">Nível de Fidelidade</label>
-                    <select class="form-select" name="nível_fidelidade">
-                        <option value="0" {{ old('nível_fidelidade', $dado->endereco->nível_fidelidade ?? 0) == 0 ? 'selected' : '' }}>
+                    <select class="form-select" name="nivel_fidelidade">
+                        <option value="0" {{ old('nivel_fidelidade', $dado->endereco->nivel_fidelidade ?? 0) == 0 ? 'selected' : '' }}>
                             Bronze
                         </option>
-                        <option value="1" {{ old('nível_fidelidade', $dado->endereco->nível_fidelidade ?? 0) == 1 ? 'selected' : '' }}>
+                        <option value="1" {{ old('nivel_fidelidade', $dado->endereco->nivel_fidelidade ?? 0) == 1 ? 'selected' : '' }}>
                             Prata
                         </option>
-                        <option value="2" {{ old('nível_fidelidade', $dado->endereco->nível_fidelidade ?? 0) == 2 ? 'selected' : '' }}>
+                        <option value="2" {{ old('nivel_fidelidade', $dado->endereco->nivel_fidelidade ?? 0) == 2 ? 'selected' : '' }}>
                             Ouro
                         </option>
                     </select>

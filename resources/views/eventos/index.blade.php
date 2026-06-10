@@ -3,6 +3,12 @@
 @section('conteudo')
 <div class="d-flex justify-content-between align-items-center mb-3">
   <h3>Eventos</h3>
+<div class="mb-3">
+  <a href="{{ route('eventos.pdf') }}"
+   class="btn btn-danger">
+    PDF
+</a>
+</div>
   <a href="{{ route('eventos.create') }}" class="btn btn-success">Novo evento</a>
 </div>
 <form class="row g-2 mb-3" method="GET" action="{{ route('eventos.index') }}">

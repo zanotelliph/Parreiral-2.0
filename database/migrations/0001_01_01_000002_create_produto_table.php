@@ -12,15 +12,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('produto', function (Blueprint $table) {
-            $table->id();
-            $table->string('Safra', 100);
-            $table->string('Tipo de Uva', 50);
-            $table->string('lote', 500)->nullable();
-            $table->string('Preço', 500)->nullable();
-            $table->string('Descrição', 300);
-            $table->string('Quantidade Disponível', 10)->nullable();
-            $table->unsignedBigInteger('categoria_id')->nullable();
-            $table->timestamps();
+            $table->string('nome');
+            $table->string('tipo_uva');
+            $table->string('lote');
+            $table->decimal('valor_unitario', 10, 2);
+            $table->text('descricao')->nullable();
+            $table->integer('quantidade_disponivel')->default(0);
         });
     }
     /** afra, tipo de uva, lote, preço, descrição e quantidade disponível.

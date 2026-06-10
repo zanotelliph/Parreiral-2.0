@@ -27,12 +27,10 @@ class clienteController extends Controller
         return view('cliente.list', ['dados' => $dados, 'q' => $q]);
     }
 
-    function create()
-    {
-        $categorias = cliente::orderBy('nome')->get();
-
-        return view('cliente.form', ['categorias' => $categorias]);
-    }
+   function create()
+{
+    return view('cliente.form');
+}
     function validateRequest(Request $request)
     {
         $request->validate([
@@ -47,7 +45,22 @@ class clienteController extends Controller
             'endereco' => 'nullable|string',
             'preferenciadecompra' => 'nullable|string',
             'historicodevisitas' => 'nullable|string',
-            'id' => 'nullable|string|unique:clientes,id',
+            'rua' => 'nullable|string|max:300',
+            'numero' => 'nullable|string|max:50',
+            'complemento' => 'nullable|string|max:300',
+            'bairro' => 'nullable|string|max:300',
+            'cidade' => 'nullable|string|max:300',
+            'estado' => 'nullable|string|max:2',
+
+            'observacoes' => 'nullable|string',
+
+            'numero_visitas' => 'nullable|integer',
+
+            'data_ultima_visita' => 'nullable|date',
+
+            'cliente_fidelizado' => 'nullable|boolean',
+
+            'nivel_fidelidade' => 'nullable|integer',
 
             'imagem' => 'nullable|image|mimes:png,jpg,jpeg'
             ], [
@@ -84,7 +97,7 @@ class clienteController extends Controller
     function edit($id)
     {
         $dado = cliente::find($id);
-        $categorias = Categoriacliente::orderBy('nome')->get();
+        $categorias = cliente::orderBy('nome')->get();
 
 
         return view('cliente.form', [

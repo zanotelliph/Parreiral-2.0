@@ -11,12 +11,16 @@ class Produto extends Model
 
     protected $table = 'produtos';
 
-    protected $fillable = [
-        'nome',
-        'categoria_produto',
-        'tipo_uva',
-        'descricao',
-        'quantidade_disponivel',
-        'valor_unitario',
-    ];
+   protected $fillable = [
+    'nome',
+    'categoria_produto',
+    'tipo_uva',
+    'lote',
+    'lote_produto',
+    'preco',
+    'preco_produto',
+    'desconto_promocao',
+    'descricao',
+    'quantidade_disponivel',
+];
 }

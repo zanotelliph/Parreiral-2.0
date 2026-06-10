@@ -22,6 +22,8 @@ Route::get('cliente/{id}/edit', [ClienteController::class, 'edit'])->name('clien
 Route::put('cliente/{id}', [ClienteController::class, 'update'])->name('cliente.update');
 Route::delete('cliente/{id}', [ClienteController::class, 'destroy'])->name('cliente.destroy');
 
+Route::get('produto/pdf', [ProdutoController::class, 'pdf'])->name('produto.pdf');
+Route::get('eventos/pdf', [EventoController::class, 'pdf'])->name('eventos.pdf');
 Route::resource('produto', ProdutoController::class);
 Route::resource('reservas-eventos', ReservaEventoController::class);
 Route::resource('eventos', EventoController::class);
@@ -37,3 +39,7 @@ Route::get(
     'compras-produtos/chart',
     [CompraProdutoController::class, 'chart']
 )->name('compras-produtos.chart');
+Route::get(
+    'reservas-eventos/chart',
+    [ReservaEventoController::class, 'chart']
+)->name('reservas-eventos.chart');

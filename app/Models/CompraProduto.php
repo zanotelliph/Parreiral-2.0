@@ -14,13 +14,16 @@ class CompraProduto extends Model
     
 
     protected $fillable = [
-        'produto_id',
-        'fornecedor',
-        'quantidade',
-        'valor_total',
-        'data_compra',
-        'observacao',
-    ];
+    'produto_id',
+    'item_compra',
+    'descricao',
+    'custo_compra',
+    'desconto',
+    'parcelas',
+    'forma_pagamento',
+    'valor_total',
+    'data_compra',
+];
     public function produto()
 {
     return $this->belongsTo(Produto::class);

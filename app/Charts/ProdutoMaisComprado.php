@@ -17,22 +17,26 @@ class ProdutoMaisComprado
     public function build(): \ArielMejiaDev\LarapexCharts\PieChart
     {
         $produtoPorCompra = DB::table('compras_produtos')
-             ->join('produto', 'compras_produtos.produto_id', '=', 'produto.id')
-             ->select('produto.nome',DB::raw('COUNT(*) as total'))
-             ->groupBy('produto.nome')
-             ->orderByDesc('total');
-        $produtos = [];
-        $quantidades = [];
-        foreach ($produtoPorCompra as $item) {
-             $produtos=[];
-             $quantidades= [];
-    }
+    ->select(
+        'item_compra',
+        DB::raw('COUNT(*) as total')
+    )
+    ->groupBy('item_compra')
+    ->orderByDesc('total')
+    ->get();
 
+$produtos = [];
+$quantidades = [];
+
+foreach ($produtoPorCompra as $item) {
+    $produtos[] = $item->item_compra;
+    $quantidades[] = $item->total;
+}
 
         return $this->chart->pieChart()
             ->setTitle('Produto Mais Comprado')
-            ->setSubtitle('Season 2021.')
+            ->setSubtitle('Compras registradas')
             ->addData($quantidades)
             ->setLabels($produtos);
     }
-}
+};
