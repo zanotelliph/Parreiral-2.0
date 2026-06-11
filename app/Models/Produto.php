@@ -12,20 +12,6 @@ class Produto extends Model
 
     protected $table = 'produtos';
 
-<<<<<<< HEAD
-   protected $fillable = [
-    'nome',
-    'categoria_produto',
-    'tipo_uva',
-    'lote',
-    'lote_produto',
-    'preco',
-    'preco_produto',
-    'desconto_promocao',
-    'descricao',
-    'quantidade_disponivel',
-];
-=======
     protected $fillable = [
         'nome',
         'categoria_produto',
@@ -51,5 +37,4 @@ class Produto extends Model
             ? asset('storage/' . $this->imagem)
             : asset('images/sem-imagem.svg');
     }
->>>>>>> 19262168641d0837dcd9295cfe234fbe446609f2
 }

@@ -14,57 +14,33 @@ class Cliente extends Model
     protected $table = 'cliente';
 
     protected $fillable = [
-<<<<<<< HEAD
-    'nome',
-    'cpf',
-    'telefone',
-    'email',
-    'data_nascimento',
-    'cep',
-    'data_cadastro',
-    'status_financeiro',
-    'endereco',
-
-    'rua',
-    'numero',
-    'complemento',
-    'bairro',
-    'cidade',
-    'estado',
-
-    'preferenciadecompra',
-    'observacoes',
-
-    'numero_visitas',
-    'data_ultima_visita',
-    'cliente_fidelizado',
-    'nivel_fidelidade',
-
-    'historicodevisitas',
-    'imagem',
-    'categoria_id'
-];
-    function edit($id)
-{
-    $dado = cliente::find($id);
-
-    return view('cliente.form', [
-        'dado' => $dado
-    ]);
-}
-=======
         'nome',
-        'data_nascimento',
-        'email',
+        'cpf',
         'telefone',
+        'email',
+        'data_nascimento',
         'cep',
         'data_cadastro',
         'status_financeiro',
-        'cpf',
         'endereco',
-        'imagem',
+
+        'rua',
+        'numero',
+        'complemento',
+        'bairro',
+        'cidade',
+        'estado',
+
         'preferenciadecompra',
+        'observacoes',
+
+        'numero_visitas',
+        'data_ultima_visita',
+        'cliente_fidelizado',
+        'nivel_fidelidade',
+
         'historicodevisitas',
+        'imagem',
         'categoria_id',
     ];
 
@@ -84,5 +60,4 @@ class Cliente extends Model
             ? asset('storage/' . $this->imagem)
             : asset('images/sem-imagem.svg');
     }
->>>>>>> 19262168641d0837dcd9295cfe234fbe446609f2
 }

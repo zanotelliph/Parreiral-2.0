@@ -4,7 +4,6 @@
 
 @section('conteudo')
 
-<<<<<<< HEAD
 <h4>Listagem de clientes</h4>
 
 <div class="row">
@@ -130,7 +129,7 @@
 </div>
 
 @stop
-=======
+
 @include('partials.page-header', [
     'title' => 'Clientes',
     'subtitle' => 'Cadastro e gestão dos amantes da vinícola',
@@ -196,4 +195,4 @@
 </div>
 
 @endsection
->>>>>>> 19262168641d0837dcd9295cfe234fbe446609f2
+ 

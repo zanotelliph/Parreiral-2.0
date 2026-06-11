@@ -4,7 +4,7 @@
 
 @section('conteudo')
 
-<<<<<<< HEAD
+
 @if(isset($chart))
 <div class="card mb-4">
     <div class="card-body">
@@ -89,7 +89,7 @@
 </table>
 
 @endsection
-=======
+
 @include('partials.page-header', [
     'title' => 'Reservas de Eventos',
     'subtitle' => 'Agendamentos para degustações e visitas à vinícola',
@@ -138,4 +138,4 @@
     </div>
 </div>
 @endsection
->>>>>>> 19262168641d0837dcd9295cfe234fbe446609f2
+ 

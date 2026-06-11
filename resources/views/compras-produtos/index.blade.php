@@ -2,7 +2,6 @@
 @section('titulo', 'Compras de Produtos')
 @section('conteudo')
 
-<<<<<<< HEAD
 @if(isset($chart))
 <div class="card mb-4">
     <div class="card-body">
@@ -67,7 +66,7 @@
     {{ $chart->script() }}
 @endif
 @endsection
-=======
+
 @include('partials.page-header', [
     'title' => 'Compras de Produtos',
     'subtitle' => 'Movimentações e vendas vinculadas aos clientes',
@@ -116,4 +115,4 @@
     </div>
 </div>
 @endsection
->>>>>>> 19262168641d0837dcd9295cfe234fbe446609f2
+ 

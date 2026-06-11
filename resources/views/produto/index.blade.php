@@ -1,7 +1,7 @@
 @extends('main')
 @section('titulo', 'Produtos')
 @section('conteudo')
-<<<<<<< HEAD
+
 <div class="d-flex justify-content-between align-items-center mb-3">
   <h3>Produtos</h3>
 <div class="mb-3">
@@ -46,7 +46,7 @@
         <form class="row g-2 flex-grow-1" method="GET" action="{{ route('produto.index') }}">
             <div class="col-md-10"><input type="search" name="q" value="{{ $q ?? '' }}" class="form-control" placeholder="Pesquisar produto, categoria, lote ou tipo"></div>
             <div class="col-md-2"><button class="btn btn-primary w-100">Buscar</button></div>
->>>>>>> 19262168641d0837dcd9295cfe234fbe446609f2
+ 
         </form>
         <a href="{{ route('produto.create') }}" class="btn btn-success text-nowrap">Novo produto</a>
     </div>

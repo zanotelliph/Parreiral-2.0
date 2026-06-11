@@ -3,7 +3,6 @@
 
 @section('conteudo')
 
-<<<<<<< HEAD
 <h4>Cadastro de Produto</h4>
 
 @php
@@ -16,7 +15,6 @@ $action = route('produto.store');
 
 <form action="{{ $action }}" method="POST">
 
-```
 @csrf
 
 @if(!empty($dado->id))
@@ -138,11 +136,10 @@ $action = route('produto.store');
 
     </div>
 </div>
-```
+
 
 </form>
 
-=======
 @include('partials.page-header', [
     'title' => isset($produto) ? 'Editar produto' : 'Novo produto',
     'subtitle' => 'Cadastre vinhos e derivados do parreiral',
@@ -177,5 +174,5 @@ $action = route('produto.store');
   <a class="btn btn-secondary" href="{{ route('produto.index') }}">Voltar</a>
 </form>
 </div>
->>>>>>> 19262168641d0837dcd9295cfe234fbe446609f2
+ 
 @endsection

@@ -1,7 +1,6 @@
 @extends('main')
 @section('titulo', 'Eventos')
 @section('conteudo')
-<<<<<<< HEAD
 <div class="d-flex justify-content-between align-items-center mb-3">
   <h3>Eventos</h3>
 <div class="mb-3">
@@ -11,7 +10,6 @@
 </a>
 </div>
   <a href="{{ route('eventos.create') }}" class="btn btn-success">Novo evento</a>
-=======
 
 @include('partials.page-header', [
     'title' => 'Eventos',
@@ -58,6 +56,6 @@
             </tbody>
         </table>
     </div>
->>>>>>> 19262168641d0837dcd9295cfe234fbe446609f2
+ 
 </div>
 @endsection

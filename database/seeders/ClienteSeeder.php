@@ -13,7 +13,7 @@ class ParreiralSeeder extends Seeder
      */
     public function run(): void
     {
-        CategoriaCliente::factory()->count(10)->create();
+        Cliente::factory()->count(10)->create();
     }
 }
 

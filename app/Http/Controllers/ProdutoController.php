@@ -1,7 +1,7 @@
 <?php
 
-
 namespace App\Http\Controllers;
+
 use Barryvdh\DomPDF\Facade\Pdf;
 use App\Models\Produto;
 use Illuminate\Http\Request;
@@ -15,21 +15,16 @@ class ProdutoController extends Controller
 
         $produtos = Produto::query()
             ->when($q !== '', function ($query) use ($q) {
-                $query->where(function ($sub) use ($q) {
-                    $sub->where('nome', 'like', "%{$q}%")
-                        ->orWhere('categoria_produto', 'like', "%{$q}%")
-                        ->orWhere('tipo_uva', 'like', "%{$q}%")
-                        ->orWhere('lote', 'like', "%{$q}%")
-                        ->orWhere('lote_produto', 'like', "%{$q}%");
-                });
+                $query->where('nome', 'like', "%{$q}%")
+                    ->orWhere('categoria_produto', 'like', "%{$q}%")
+                    ->orWhere('tipo_uva', 'like', "%{$q}%")
+                    ->orWhere('lote', 'like', "%{$q}%")
+                    ->orWhere('lote_produto', 'like', "%{$q}%");
             })
             ->latest()
             ->get();
 
-        return view('produto.index', [
-            'produtos' => $produtos,
-            'q' => $q
-        ]);
+        return view('produto.index', compact('produtos', 'q'));
     }
 
     public function create()
@@ -41,39 +36,21 @@ class ProdutoController extends Controller
 
     public function store(Request $request)
     {
-<<<<<<< HEAD
-        $data = $request->validate([
-            'nome' => 'required|string|max:100',
-            'categoria_produto' => 'nullable|string|max:100',
-            'tipo_uva' => 'nullable|string|max:100',
-            'lote' => 'nullable|string|max:100',
-            'lote_produto' => 'nullable|string|max:100',
-            'preco' => 'nullable|numeric',
-            'preco_produto' => 'nullable|numeric',
-            'desconto_promocao' => 'nullable|numeric',
-            'quantidade_disponivel' => 'nullable|integer|min:0',
-            'descricao' => 'nullable|string',
-        ]);
-=======
         $data = $this->validatedData($request);
 
         if ($request->hasFile('imagem')) {
             $data['imagem'] = $request->file('imagem')->store('imagem/produto', 'public');
         }
->>>>>>> 19262168641d0837dcd9295cfe234fbe446609f2
 
         Produto::create($data);
 
-        return redirect()
-            ->route('produto.index')
+        return redirect()->route('produto.index')
             ->with('success', 'Produto cadastrado com sucesso.');
     }
 
     public function edit(Produto $produto)
     {
-        return view('produto.form', [
-            'dado' => $produto
-        ]);
+        return view('produto.form', ['dado' => $produto]);
     }
 
     public function update(Request $request, Produto $produto)
@@ -84,12 +61,14 @@ class ProdutoController extends Controller
             if ($produto->imagem) {
                 Storage::disk('public')->delete($produto->imagem);
             }
+
             $data['imagem'] = $request->file('imagem')->store('imagem/produto', 'public');
         }
 
         $produto->update($data);
 
-        return redirect()->route('produto.index')->with('success', 'Produto atualizado com sucesso.');
+        return redirect()->route('produto.index')
+            ->with('success', 'Produto atualizado com sucesso.');
     }
 
     public function destroy(Produto $produto)
@@ -100,7 +79,22 @@ class ProdutoController extends Controller
 
         $produto->delete();
 
-        return redirect()->route('produto.index')->with('success', 'Produto removido com sucesso.');
+        return redirect()->route('produto.index')
+            ->with('success', 'Produto removido com sucesso.');
+    }
+
+    public function show(Produto $produto)
+    {
+        return redirect()->route('produto.index');
+    }
+
+    public function pdf()
+    {
+        $produtos = Produto::all();
+
+        $pdf = Pdf::loadView('produto.pdf', compact('produtos'));
+
+        return $pdf->download('produtos.pdf');
     }
 
     private function validatedData(Request $request): array
@@ -115,41 +109,8 @@ class ProdutoController extends Controller
             'preco_produto' => 'nullable|numeric',
             'desconto_promocao' => 'nullable|numeric',
             'quantidade_disponivel' => 'nullable|integer|min:0',
-<<<<<<< HEAD
+            'imagem' => 'nullable|image|mimes:png,jpg,jpeg|max:5120',
             'descricao' => 'nullable|string',
         ]);
-
-        $produto->update($data);
-
-        return redirect()
-            ->route('produto.index')
-            ->with('success', 'Produto atualizado com sucesso.');
     }
-    public function show(Produto $produto)
-{
-    return redirect()->route('produto.index');
-}
-    public function destroy(Produto $produto)
-    {
-        $produto->delete();
-
-        return redirect()
-            ->route('produto.index')
-            ->with('success', 'Produto removido com sucesso.');
-=======
-            'imagem' => 'nullable|image|mimes:png,jpg,jpeg|max:5120',
-        ]);
->>>>>>> 19262168641d0837dcd9295cfe234fbe446609f2
-    }
-  public function pdf()
-{
-    $produtos = Produto::all();
-
-    $pdf = Pdf::loadView('produto.pdf', compact('produtos'));
-    $content = $pdf->output();
-    
-    return response($content, 200)
-        ->header('Content-Type', 'application/pdf')
-        ->header('Content-Disposition', 'attachment; filename="produtos.pdf"');
-}
 }

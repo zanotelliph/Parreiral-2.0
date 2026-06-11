@@ -3,148 +3,195 @@
 @section('titulo', 'Painel de Gestão')
 
 @section('conteudo')
-<<<<<<< HEAD
 <div class="py-4">
-    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
-        <div>
-            <h1 class="h3 mb-1">Painel de Gestão</h1>
-            <p class="text-muted mb-0">Acesse rapidamente os módulos do sistema.</p>
+
+    <div class="page-hero page-hero-dashboard mb-2">
+        <p>Sistema de gestão empresarial.</p>
+    </div>
+
+        <div class="col-md-1">
+            <div class="card card-parreiral-gold stat-card h-60">
+                <div class="card-body">
+                    <p class="stat-label mb-1">Compras registradas</p>
+                    <p class="stat-value mb-0">{{ $totalCompras }}</p>
+                </div>
+            </div>
         </div>
 
-=======
-<div class="page-hero page-hero-dashboard">
-    <h1 class="h3">Painel de Gestão</h1>
-    <p>Visão geral da vinícola — clientes, vendas, estoque e parreiral.</p>
-</div>
-
-<div class="row g-3 mb-4">
-    <div class="col-md-4">
-        <div class="card card-parreiral stat-card h-100">
-            <div class="card-body">
-                <p class="stat-label mb-1">Total de clientes</p>
-                <p class="stat-value mb-0">{{ $totalClientes }}</p>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-4">
-        <div class="card card-parreiral-gold stat-card h-100">
-            <div class="card-body">
-                <p class="stat-label mb-1">Compras registradas</p>
-                <p class="stat-value mb-0">{{ $totalCompras }}</p>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-4">
-        <div class="card card-parreiral-vine stat-card h-100">
-            <div class="card-body">
-                <p class="stat-label mb-1">Valor total em compras</p>
-                <p class="stat-value mb-0">R$ {{ number_format($valorTotalCompras, 2, ',', '.') }}</p>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="row g-4 mb-4">
-    <div class="col-lg-6">
-        <div class="card card-parreiral h-100">
-            <div class="card-body">
-                <h5 class="card-title">Compras por mês ({{ now()->year }})</h5>
-                <p class="text-muted small">Valor total das compras realizadas em cada mês.</p>
-                <canvas id="graficoCompras" height="220"></canvas>
-            </div>
-        </div>
-    </div>
-    <div class="col-lg-6">
-        <div class="card card-parreiral-gold h-100">
-            <div class="card-body">
-                <h5 class="card-title">Clientes por status financeiro</h5>
-                <p class="text-muted small">Distribuição dos clientes entre em dia e pendente.</p>
-                <canvas id="graficoClientes" height="220"></canvas>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="row g-4 mb-4">
-    <div class="col-12 col-md-6 col-xl-4">
-        <div class="card card-parreiral h-100">
-            <div class="card-body">
-                <span class="module-icon">📊</span>
-                <h5 class="card-title">Relatório de Compras</h5>
-                <p class="card-text text-muted">Filtre compras por período e cliente com totais consolidados.</p>
-                <a href="{{ route('relatorios.compras') }}" class="btn btn-outline-primary">Abrir relatório</a>
-            </div>
-        </div>
-    </div>
-    <div class="col-12 col-md-6 col-xl-4">
-        <div class="card card-parreiral-gold h-100">
-            <div class="card-body">
-                <span class="module-icon">👥</span>
-                <h5 class="card-title">Relatório de Clientes</h5>
-                <p class="card-text text-muted">Identificadores únicos, status e histórico de compras.</p>
-                <a href="{{ route('relatorios.clientes') }}" class="btn btn-outline-primary">Abrir relatório</a>
-            </div>
-        </div>
-    </div>
-    <div class="col-12 col-md-6 col-xl-4">
-        <div class="card card-parreiral-vine h-100">
-            <div class="card-body">
-                <span class="module-icon">🧑‍🤝‍🧑</span>
-                <h5 class="card-title">Clientes</h5>
-                <p class="card-text text-muted">Cadastros e relacionamento com a vinícola.</p>
-                <a href="{{ route('cliente.index') }}" class="btn btn-primary">Abrir clientes</a>
-            </div>
-        </div>
-    </div>
->>>>>>> 19262168641d0837dcd9295cfe234fbe446609f2
-
-    <div class="col-12 col-md-6 col-xl-4">
-        <div class="card card-parreiral h-100">
-            <div class="card-body">
-                <span class="module-icon">🍷</span>
-                <h5 class="card-title">Produtos</h5>
-                <p class="card-text text-muted">Catálogo de vinhos, sucos e derivados da uva.</p>
-                <a href="{{ route('produto.index') }}" class="btn btn-outline-primary">Abrir produtos</a>
+        <div class="col-md-4">
+            <div class="card card-parreiral-vine stat-card h-100">
+                <div class="card-body">
+                    <p class="stat-label mb-1">Valor total em compras</p>
+                    <p class="stat-value mb-0">
+                        R$ {{ number_format($valorTotalCompras, 2, ',', '.') }}
+                    </p>
+                </div>
             </div>
         </div>
     </div>
 
-    <div class="col-12 col-md-6 col-xl-4">
-        <div class="card card-parreiral-gold h-100">
-            <div class="card-body">
-                <span class="module-icon">🛒</span>
-                <h5 class="card-title">Compras de Produtos</h5>
-                <p class="card-text text-muted">Movimentações vinculadas aos clientes.</p>
-                <a href="{{ route('compras-produtos.index') }}" class="btn btn-outline-primary">Abrir compras</a>
+    <div class="row g-4 mb-4">
+        <div class="col-lg-6">
+            <div class="card card-parreiral h-100">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        Produtos mais comprados ({{ now()->year }})
+                    </h5>
+
+
+                    <canvas id="graficoCompras" height="100"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6">
+            <div class="card card-parreiral-gold h-100">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        Eventos mais acessados.
+                    </h5>
+
+                    <p class="text-muted small">
+                        Distribuição dos clientes entre em dia e pendente.
+                    </p>
+
+                    <canvas id="graficoClientes" height="220"></canvas>
+                </div>
             </div>
         </div>
     </div>
 
-    <div class="col-12 col-md-6 col-xl-4">
-        <div class="card card-parreiral-vine h-100">
-            <div class="card-body">
-                <span class="module-icon">📦</span>
-                <h5 class="card-title">Estoque</h5>
-                <p class="card-text text-muted">Controle de garrafas e insumos do parreiral.</p>
-                <a href="{{ route('estoques.index') }}" class="btn btn-outline-primary">Abrir estoque</a>
+    <div class="row g-4 mb-4">
+
+        <div class="col-12 col-md-6 col-xl-4">
+            <div class="card card-parreiral h-100">
+                <div class="card-body">
+                    <span class="module-icon"></span>
+                    <h5 class="card-title">Relatório de Produtos mais comprados</h5>
+
+                    <p class="card-text text-muted">
+                        Ordem de produtos que masi despertam interesse nos consumidores.
+                    </p>
+
+                    <a href="{{ route('relatorios.compras') }}"
+                        class="btn btn-outline-primary">
+                        Acessar relatório
+                    </a>
+                </div>
             </div>
         </div>
+
+        <div class="col-12 col-md-6 col-xl-4">
+            <div class="card card-parreiral-gold h-100">
+                <div class="card-body">
+                    <span class="module-icon"></span>
+                    <h5 class="card-title">Relatório de Eventos mais acessados</h5>
+
+                    <p class="card-text text-muted">
+                        Eventos com maior público.
+                    </p>
+
+                    <a href="{{ route('relatorios.clientes') }}"
+                        class="btn btn-outline-primary">
+                        Acessar relatório
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-md-6 col-xl-4">
+            <div class="card card-parreiral-vine h-100">
+                <div class="card-body">
+                    <span class="module-icon"></span>
+                    <h5 class="card-title">Clientes</h5>
+
+                    <p class="card-text text-muted">
+                        Cadastros e relacionamento com a vinícola.
+                    </p>
+
+                    <a href="{{ route('cliente.index') }}"
+                        class="btn btn-primary">
+                        Acessar clientes
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-md-6 col-xl-4">
+            <div class="card card-parreiral h-100">
+                <div class="card-body">
+                    <span class="module-icon"></span>
+                    <h5 class="card-title">Produtos</h5>
+
+                    <p class="card-text text-muted">
+                        Catálogo de vinhos, sucos e derivados da uva.
+                    </p>
+
+                    <a href="{{ route('produto.index') }}"
+                        class="btn btn-outline-primary">
+                        Acessar produtos
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-md-6 col-xl-4">
+            <div class="card card-parreiral-gold h-100">
+                <div class="card-body">
+                    <span class="module-icon"></span>
+                    <h5 class="card-title">Compras de Produtos</h5>
+
+                    <p class="card-text text-muted">
+                        Movimentações vinculadas aos clientes.
+                    </p>
+
+                    <a href="{{ route('compras-produtos.index') }}"
+                        class="btn btn-outline-primary">
+                        Acessar compras
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-md-6 col-xl-4">
+            <div class="card card-parreiral-vine h-100">
+                <div class="card-body">
+                    <span class="module-icon"></span>
+                    <h5 class="card-title">Estoque</h5>
+
+                    <p class="card-text text-muted">
+                        Controle de garrafas e insumos do parreiral.
+                    </p>
+
+                    <a href="{{ route('estoques.index') }}"
+                        class="btn btn-outline-primary">
+                        Acesse aquo
+                    </a>
+                </div>
+            </div>
+        </div>
+
     </div>
+
 </div>
 @endsection
 
 @push('scripts')
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
-<script>
-    const wineColors = {
-        burgundy: 'rgba(139, 42, 58, 0.85)',
-        burgundyBorder: 'rgba(107, 31, 46, 1)',
-        gold: 'rgba(201, 169, 97, 0.9)',
-        vine: 'rgba(74, 124, 78, 0.9)',
-        cream: 'rgba(139, 115, 90, 0.7)',
-    };
 
-    new Chart(document.getElementById('graficoCompras'), {
+<script>
+const wineColors = {
+    burgundy: 'rgba(139, 42, 58, 0.85)',
+    burgundyBorder: 'rgba(107, 31, 46, 1)',
+    gold: 'rgba(201, 169, 97, 0.9)',
+    vine: 'rgba(74, 124, 78, 0.9)',
+    cream: 'rgba(139, 115, 90, 0.7)',
+};
+
+const graficoCompras = document.getElementById('graficoCompras');
+
+if (graficoCompras) {
+    new Chart(graficoCompras, {
         type: 'bar',
         data: {
             labels: @json($comprasLabels),
@@ -159,31 +206,49 @@
         },
         options: {
             responsive: true,
-            plugins: { legend: { display: false } },
+            plugins: {
+                legend: {
+                    display: false
+                }
+            },
             scales: {
                 y: {
                     beginAtZero: true,
-                    grid: { color: 'rgba(107, 31, 46, 0.08)' },
+                    grid: {
+                        color: 'rgba(107, 31, 46, 0.08)'
+                    },
                     ticks: {
-                        color: '#6b5344',
-                        callback: (value) => 'R$ ' + value.toLocaleString('pt-BR')
+                        color: '#6b5344'
                     }
                 },
                 x: {
-                    grid: { display: false },
-                    ticks: { color: '#6b5344' }
+                    grid: {
+                        display: false
+                    },
+                    ticks: {
+                        color: '#6b5344'
+                    }
                 }
             }
         }
     });
+}
 
-    new Chart(document.getElementById('graficoClientes'), {
+const graficoClientes = document.getElementById('graficoClientes');
+
+if (graficoClientes) {
+    new Chart(graficoClientes, {
         type: 'doughnut',
         data: {
             labels: @json($clientesStatusLabels),
             datasets: [{
                 data: @json($clientesStatusValores),
-                backgroundColor: [wineColors.vine, wineColors.burgundy, wineColors.gold, wineColors.cream],
+                backgroundColor: [
+                    wineColors.vine,
+                    wineColors.burgundy,
+                    wineColors.gold,
+                    wineColors.cream
+                ],
                 borderColor: '#fdfbf7',
                 borderWidth: 2,
             }]
@@ -193,10 +258,13 @@
             plugins: {
                 legend: {
                     position: 'bottom',
-                    labels: { color: '#6b5344', font: { family: 'Source Sans 3' } }
+                    labels: {
+                        color: '#6b5344'
+                    }
                 }
             }
         }
     });
+}
 </script>
 @endpush
