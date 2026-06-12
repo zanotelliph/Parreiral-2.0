@@ -24,12 +24,6 @@
         @endif
         <div class="row">
             <div class="col-md-4">
-                <label for="codigo_externo" class="form-label">Identificador Único</label>
-                <input type="text" class="form-control" name="codigo_externo"
-                    value="{{ old('codigo_externo', optional($dado ?? null)->identificador?->codigo_externo) }}"
-                    placeholder="Ex: CLI-0001">
-            </div>
-            <div class="col-md-4">
                 <label class="form-label">Tipo de documento</label>
                 <select class="form-select" name="tipo_documento">
                     <option value="cpf" @selected(old('tipo_documento', optional($dado ?? null)->identificador?->tipo_documento ?? 'cpf') === 'cpf')>CPF</option>

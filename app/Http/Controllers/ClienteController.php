@@ -10,26 +10,48 @@ use Illuminate\Validation\Rule;
 
 class ClienteController extends Controller
 {
-    public function index(Request $request)
+    public function index()
     {
-        $q = trim($request->input('q', ''));
 
-        $dados = Cliente::query()
-            ->with('identificador')
-            ->when($q !== '', function ($query) use ($q) {
-                $query->where('nome', 'like', "%{$q}%")
-                    ->orWhere('email', 'like', "%{$q}%")
-                    ->orWhere('telefone', 'like', "%{$q}%")
-                    ->orWhere('cpf', 'like', "%{$q}%");
-            })
-            ->get();
+        $dados = Cliente::all();
+            
 
-        return view('cliente.list', compact('dados', 'q'));
+        return view('cliente.list', ['dados' => $dados]);
     }
 
     public function create()
     {
         return view('cliente.form');
+    }
+    protected function validateRequest(Request $request, ?int $clienteId = null)
+    {
+        return $request->validate([
+            'nome' => 'required|string|max:100',
+            'data_nascimento' => 'nullable|date',
+            'email' => 'required|email',
+            'telefone' => 'required|string|max:20',
+
+            'cpf' => 'nullable|string|max:20',
+            'endereco' => 'nullable|string',
+
+            'imagem' => 'nullable|image|mimes:png,jpg,jpeg|max:5120',
+
+            'codigo_externo' => [
+                'nullable',
+                'string',
+                'max:50',
+                Rule::unique('cliente_identificadores', 'codigo_externo')
+                    ->ignore($clienteId, 'cliente_id'),
+            ],
+
+            'tipo_documento' => 'nullable|string|max:30',
+            'documento' => 'nullable|string|max:30',
+        ], [
+            'nome.required' => 'O nome é obrigatório',
+            'email.required' => 'O e-mail é obrigatório',
+            'telefone.required' => 'O telefone é obrigatório',
+            'imagem.image' => 'Arquivo inválido de imagem',
+        ]);
     }
 
     public function store(Request $request)
@@ -47,7 +69,6 @@ class ClienteController extends Controller
         }
 
         $cliente = Cliente::create($data);
-        $this->syncIdentificador($cliente, $request);
 
         return redirect('cliente')->with('success', 'Registro cadastrado com sucesso!');
     }
@@ -80,7 +101,6 @@ class ClienteController extends Controller
         }
 
         $cliente->update($data);
-        $this->syncIdentificador($cliente, $request);
 
         return redirect('cliente')->with('success', 'Registro atualizado com sucesso!');
     }
@@ -92,63 +112,20 @@ class ClienteController extends Controller
         return redirect('cliente')->with('success', 'Registro removido com sucesso!');
     }
 
-    public function search(Request $request)
+    function search(Request $request)
     {
         if (!empty($request->valor)) {
-            $dados = Cliente::with('identificador')
-                ->where($request->tipo, 'like', '%' . $request->valor . '%')
-                ->get();
+            $dados = Cliente::where(
+                $request->tipo,
+                'like',
+                '%' . $request->valor . '%'
+            )->get();
         } else {
-            $dados = Cliente::with('identificador')->get();
+            $dados = Cliente::all();
         }
 
-        return view('cliente.list', compact('dados'));
+        return view('cliente.list', ['dados' => $dados]);
     }
 
-    protected function validateRequest(Request $request, ?int $clienteId = null)
-    {
-        return $request->validate([
-            'nome' => 'required|string|max:100',
-            'data_nascimento' => 'nullable|date',
-            'email' => 'required|email',
-            'telefone' => 'required|string|max:20',
 
-            'cpf' => 'nullable|string|max:20',
-            'endereco' => 'nullable|string',
-
-            'imagem' => 'nullable|image|mimes:png,jpg,jpeg|max:5120',
-
-            'codigo_externo' => [
-                'nullable',
-                'string',
-                'max:50',
-                Rule::unique('cliente_identificadores', 'codigo_externo')
-                    ->ignore($clienteId, 'cliente_id'),
-            ],
-
-            'tipo_documento' => 'nullable|string|max:30',
-            'documento' => 'nullable|string|max:30',
-        ], [
-            'nome.required' => 'O nome é obrigatório',
-            'email.required' => 'O e-mail é obrigatório',
-            'telefone.required' => 'O telefone é obrigatório',
-            'imagem.image' => 'Arquivo inválido de imagem',
-        ]);
-    }
-
-    private function syncIdentificador(Cliente $cliente, Request $request): void
-    {
-        if (!$request->filled('codigo_externo')) {
-            return;
-        }
-
-        ClienteIdentificador::updateOrCreate(
-            ['cliente_id' => $cliente->id],
-            [
-                'codigo_externo' => $request->input('codigo_externo'),
-                'tipo_documento' => $request->input('tipo_documento', 'cpf'),
-                'documento' => $request->input('documento', $cliente->cpf),
-            ]
-        );
-    }
 }

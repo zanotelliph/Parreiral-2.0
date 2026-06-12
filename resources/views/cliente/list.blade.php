@@ -63,7 +63,6 @@
                 @forelse ($dados as $item)
 
                     <tr>
-                        <td>{{ $item->id }}</td>
                         <td>{{ $item->nome }}</td>
                         <td>{{ $item->cpf }}</td>
                         <td>{{ $item->email }}</td>
@@ -155,14 +154,12 @@
                 <tr>
                     <th scope="col">#</th>
                     <th scope="col">Foto</th>
-                    <th scope="col">Identificador</th>
                     <th scope="col">Nome</th>
                     <th scope="col">Data Nascimento</th>
                     <th scope="col">Email</th>
                     <th scope="col">Telefone</th>
                     <th scope="col">CEP</th>
                     <th scope="col">Status</th>
-                    <th scope="col">Ações</th>
                 </tr>
             </thead>
             <tbody>
@@ -172,7 +169,6 @@
                         <td>
                             <img src="{{ $item->imagem_url }}" alt="{{ $item->nome }}" class="rounded-circle" width="48" height="48" style="object-fit: cover;">
                         </td>
-                        <td>{{ $item->identificador?->codigo_externo ?? '—' }}</td>
                         <td>{{ $item->nome }}</td>
                         <td>{{ $item->data_nascimento }}</td>
                         <td>{{ $item->email }}</td>
@@ -194,5 +190,5 @@
     </div>
 </div>
 
-@endsection
+
  
