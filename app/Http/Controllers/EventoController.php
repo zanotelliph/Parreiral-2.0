@@ -54,6 +54,11 @@ class EventoController extends Controller
         return view('eventos.form', compact('evento'));
     }
 
+    public function show(Evento $evento)
+    {
+        return redirect()->route('eventos.index');
+    }
+
     public function update(Request $request, Evento $evento)
     {
         $data = $request->validate([
@@ -93,5 +98,4 @@ class EventoController extends Controller
             ->header('Content-Disposition', 'attachment; filename="eventos.pdf"');
     }
 }
-
 

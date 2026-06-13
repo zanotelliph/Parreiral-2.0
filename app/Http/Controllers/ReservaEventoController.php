@@ -4,11 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Models\ReservaEvento;
 use Illuminate\Http\Request;
-use App\Charts\EventoMaisReservado;
+use ArielMejiaDev\LarapexCharts\LarapexChart;
+use Illuminate\Support\Facades\DB;
 
 class ReservaEventoController extends Controller
 {
-    public function index(Request $request, EventoMaisReservado $chart)
+    public function index(Request $request, LarapexChart $chart)
     {
         $q = trim($request->input('q', ''));
 
@@ -28,7 +29,7 @@ class ReservaEventoController extends Controller
         return view('reservas-eventos.index', [
             'reservas' => $reservas,
             'q' => $q,
-            'chart' => $chart->build(),
+            'chart' => $this->eventoMaisReservadoChart($chart),
         ]);
     }
 
@@ -62,6 +63,11 @@ class ReservaEventoController extends Controller
         return view('reservas-eventos.form', compact('reservaEvento'));
     }
 
+    public function show(ReservaEvento $reservaEvento)
+    {
+        return redirect()->route('reservas-eventos.index');
+    }
+
     public function update(Request $request, ReservaEvento $reservaEvento)
     {
         $data = $request->validate([
@@ -88,10 +94,24 @@ class ReservaEventoController extends Controller
 
         return redirect()->route('reservas-eventos.index')->with('success', 'Reserva removida com sucesso.');
     }
-    public function chart(EventoMaisReservado $chart)
+    public function chart(LarapexChart $chart)
 {
     return view('reservas-eventos.chart', [
-        'chart' => $chart->build()
+        'chart' => $this->eventoMaisReservadoChart($chart)
     ]);
 }
+
+    private function eventoMaisReservadoChart(LarapexChart $chart): \ArielMejiaDev\LarapexCharts\PieChart
+    {
+        $dados = DB::table('reservas_eventos')
+            ->select('evento', DB::raw('COUNT(*) as total'))
+            ->groupBy('evento')
+            ->orderByDesc('total')
+            ->get();
+
+        return $chart->pieChart()
+            ->setTitle('Eventos Mais Reservados')
+            ->addData($dados->pluck('total')->map(fn ($total) => (int) $total)->all())
+            ->setLabels($dados->pluck('evento')->all());
+    }
 } 

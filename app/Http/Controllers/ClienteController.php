@@ -12,16 +12,25 @@ class ClienteController extends Controller
 {
     public function index()
     {
+        $q = trim(request('q', ''));
 
-        $dados = Cliente::all();
+        $dados = Cliente::query()
+            ->when($q !== '', function ($query) use ($q) {
+                $query->where('nome', 'like', "%{$q}%")
+                    ->orWhere('email', 'like', "%{$q}%")
+                    ->orWhere('telefone', 'like', "%{$q}%")
+                    ->orWhere('cpf', 'like', "%{$q}%");
+            })
+            ->orderBy('nome')
+            ->get();
             
 
-        return view('cliente.list', ['dados' => $dados]);
+        return view('cliente.list', compact('dados', 'q'));
     }
 
     public function create()
     {
-        return view('cliente.form');
+        return view('cliente.form', ['dado' => new Cliente()]);
     }
     protected function validateRequest(Request $request, ?int $clienteId = null)
     {
@@ -46,6 +55,21 @@ class ClienteController extends Controller
 
             'tipo_documento' => 'nullable|string|max:30',
             'documento' => 'nullable|string|max:30',
+            'cep' => 'nullable|string|max:10',
+            'data_cadastro' => 'nullable|date',
+            'status_financeiro' => 'nullable|string|max:50',
+            'rua' => 'nullable|string|max:300',
+            'numero' => 'nullable|string|max:50',
+            'complemento' => 'nullable|string|max:300',
+            'bairro' => 'nullable|string|max:300',
+            'cidade' => 'nullable|string|max:300',
+            'estado' => 'nullable|string|max:2',
+            'preferenciadecompra' => 'nullable|string|max:500',
+            'observacoes' => 'nullable|string',
+            'numero_visitas' => 'nullable|integer|min:0',
+            'data_ultima_visita' => 'nullable|date',
+            'cliente_fidelizado' => 'nullable|boolean',
+            'nivel_fidelidade' => 'nullable|integer|min:0|max:2',
         ], [
             'nome.required' => 'O nome é obrigatório',
             'email.required' => 'O e-mail é obrigatório',
@@ -61,7 +85,10 @@ class ClienteController extends Controller
         $data = $request->only([
             'nome', 'data_nascimento', 'email', 'telefone', 'cep',
             'data_cadastro', 'status_financeiro', 'cpf', 'endereco',
-            'preferenciadecompra', 'historicodevisitas',
+            'rua', 'numero', 'complemento', 'bairro', 'cidade', 'estado',
+            'preferenciadecompra', 'observacoes', 'numero_visitas',
+            'data_ultima_visita', 'cliente_fidelizado', 'nivel_fidelidade',
+            'historicodevisitas',
         ]);
 
         if ($request->hasFile('imagem')) {
@@ -69,6 +96,7 @@ class ClienteController extends Controller
         }
 
         $cliente = Cliente::create($data);
+        $this->salvarIdentificador($request, $cliente);
 
         return redirect('cliente')->with('success', 'Registro cadastrado com sucesso!');
     }
@@ -89,7 +117,10 @@ class ClienteController extends Controller
         $data = $request->only([
             'nome', 'data_nascimento', 'email', 'telefone', 'cep',
             'data_cadastro', 'status_financeiro', 'cpf', 'endereco',
-            'preferenciadecompra', 'historicodevisitas',
+            'rua', 'numero', 'complemento', 'bairro', 'cidade', 'estado',
+            'preferenciadecompra', 'observacoes', 'numero_visitas',
+            'data_ultima_visita', 'cliente_fidelizado', 'nivel_fidelidade',
+            'historicodevisitas',
         ]);
 
         if ($request->hasFile('imagem')) {
@@ -101,13 +132,20 @@ class ClienteController extends Controller
         }
 
         $cliente->update($data);
+        $this->salvarIdentificador($request, $cliente);
 
         return redirect('cliente')->with('success', 'Registro atualizado com sucesso!');
     }
 
     public function destroy($id)
     {
-        Cliente::destroy($id);
+        $cliente = Cliente::findOrFail($id);
+
+        if ($cliente->imagem) {
+            Storage::disk('public')->delete($cliente->imagem);
+        }
+
+        $cliente->delete();
 
         return redirect('cliente')->with('success', 'Registro removido com sucesso!');
     }
@@ -128,4 +166,19 @@ class ClienteController extends Controller
     }
 
 
+    private function salvarIdentificador(Request $request, Cliente $cliente): void
+    {
+        if (!$request->filled('documento') && !$request->filled('codigo_externo')) {
+            return;
+        }
+
+        ClienteIdentificador::updateOrCreate(
+            ['cliente_id' => $cliente->id],
+            [
+                'codigo_externo' => $request->input('codigo_externo') ?: 'CLI-' . $cliente->id,
+                'tipo_documento' => $request->input('tipo_documento', 'cpf'),
+                'documento' => $request->input('documento'),
+            ]
+        );
+    }
 }

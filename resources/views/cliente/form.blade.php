@@ -1,10 +1,10 @@
-@extends('main')
-@section('titulo', 'Formulário cliente')
+﻿@extends('main')
+@section('titulo', 'FormulÃ¡rio cliente')
 @section('conteudo')
 
 @include('partials.page-header', [
     'title' => !empty($dado->id) ? 'Editar cliente' : 'Novo cliente',
-    'subtitle' => 'Cadastro de clientes da vinícola',
+    'subtitle' => 'Cadastro de clientes da vinÃ­cola',
 ])
 
 <div class="content-panel">
@@ -67,122 +67,122 @@
                     <option value="pendente" {{ old('status_financeiro', $dado->status_financeiro ?? 'em dia') == 'pendente' ? 'selected' : '' }}>Pendente</option>
                 </select>
             </div>
-                    {{-- ENDEREÇO --}}
+                    {{-- ENDEREÃ‡O --}}
         <div class="row">
             <div class="col">
                 <label class="form-label">CEP</label>
                 <input type="text" class="form-control" name="cep"
-                    value="{{ old('cep', $dado->endereco->cep ?? '') }}">
+                    value="{{ old('cep', $dado->cep ?? '') }}">
                 </div>
 
                 <div class="col">
                     <label class="form-label">Rua / Avenida</label>
                     <input type="text" class="form-control" name="rua"
-                        value="{{ old('rua', $dado->endereco->rua ?? '') }}">
+                        value="{{ old('rua', $dado->rua ?? '') }}">
                 </div>
             </div>
             <div class="row">
                 <div class="col">
-                    <label class="form-label">Número</label>
+                    <label class="form-label">NÃºmero</label>
                     <input type="text" class="form-control" name="numero"
-                        value="{{ old('numero', $dado->endereco->numero ?? '') }}">
+                        value="{{ old('numero', $dado->numero ?? '') }}">
                 </div>
                 <div class="col">
                     <label class="form-label">Complemento</label>
                     <input type="text" class="form-control" name="complemento"
-                        value="{{ old('complemento', $dado->endereco->complemento ?? '') }}">
+                        value="{{ old('complemento', $dado->complemento ?? '') }}">
                 </div>
             </div>
             <div class="row">
                 <div class="col">
                     <label class="form-label">Bairro</label>
                     <input type="text" class="form-control" name="bairro"
-                        value="{{ old('bairro', $dado->endereco->bairro ?? '') }}">
+                        value="{{ old('bairro', $dado->bairro ?? '') }}">
                 </div>
                 <div class="col">
                     <label class="form-label">Cidade</label>
                     <input type="text" class="form-control" name="cidade"
-                        value="{{ old('cidade', $dado->endereco->cidade ?? '') }}">
+                        value="{{ old('cidade', $dado->cidade ?? '') }}">
                 </div>
                 <div class="col">
                     <label class="form-label">Estado</label>
                     <select class="form-control" name="estado">
                     <option value="">Selecione</option>
-                        <option value="AC" {{ old('estado', $dado->endereco->estado ?? '') == 'AC' ? 'selected' : '' }}>Acre</option>
-                        <option value="AL" {{ old('estado', $dado->endereco->estado ?? '') == 'AL' ? 'selected' : '' }}>Alagoas</option>
-                        <option value="AP" {{ old('estado', $dado->endereco->estado ?? '') == 'AP' ? 'selected' : '' }}>Amapá</option>
-                        <option value="AM" {{ old('estado', $dado->endereco->estado ?? '') == 'AM' ? 'selected' : '' }}>Amazonas</option>
-                        <option value="BA" {{ old('estado', $dado->endereco->estado ?? '') == 'BA' ? 'selected' : '' }}>Bahia</option>
-                        <option value="CE" {{ old('estado', $dado->endereco->estado ?? '') == 'CE' ? 'selected' : '' }}>Ceará</option>
-                        <option value="DF" {{ old('estado', $dado->endereco->estado ?? '') == 'DF' ? 'selected' : '' }}>Distrito Federal</option>
-                        <option value="ES" {{ old('estado', $dado->endereco->estado ?? '') == 'ES' ? 'selected' : '' }}>Espírito Santo</option>
-                        <option value="GO" {{ old('estado', $dado->endereco->estado ?? '') == 'GO' ? 'selected' : '' }}>Goiás</option>
-                        <option value="MA" {{ old('estado', $dado->endereco->estado ?? '') == 'MA' ? 'selected' : '' }}>Maranhão</option>
-                        <option value="MT" {{ old('estado', $dado->endereco->estado ?? '') == 'MT' ? 'selected' : '' }}>Mato Grosso</option>
-                        <option value="MS" {{ old('estado', $dado->endereco->estado ?? '') == 'MS' ? 'selected' : '' }}>Mato Grosso do Sul</option>
-                        <option value="MG" {{ old('estado', $dado->endereco->estado ?? '') == 'MG' ? 'selected' : '' }}>Minas Gerais</option>
-                        <option value="PA" {{ old('estado', $dado->endereco->estado ?? '') == 'PA' ? 'selected' : '' }}>Pará</option>
-                        <option value="PB" {{ old('estado', $dado->endereco->estado ?? '') == 'PB' ? 'selected' : '' }}>Paraíba</option>
-                        <option value="PR" {{ old('estado', $dado->endereco->estado ?? '') == 'PR' ? 'selected' : '' }}>Paraná</option>
-                        <option value="PE" {{ old('estado', $dado->endereco->estado ?? '') == 'PE' ? 'selected' : '' }}>Pernambuco</option>
-                        <option value="PI" {{ old('estado', $dado->endereco->estado ?? '') == 'PI' ? 'selected' : '' }}>Piauí</option>
-                        <option value="RJ" {{ old('estado', $dado->endereco->estado ?? '') == 'RJ' ? 'selected' : '' }}>Rio de Janeiro</option>
-                        <option value="RN" {{ old('estado', $dado->endereco->estado ?? '') == 'RN' ? 'selected' : '' }}>Rio Grande do Norte</option>
-                        <option value="RS" {{ old('estado', $dado->endereco->estado ?? '') == 'RS' ? 'selected' : '' }}>Rio Grande do Sul</option>
-                        <option value="RO" {{ old('estado', $dado->endereco->estado ?? '') == 'RO' ? 'selected' : '' }}>Rondônia</option>
-                        <option value="RR" {{ old('estado', $dado->endereco->estado ?? '') == 'RR' ? 'selected' : '' }}>Roraima</option>
-                        <option value="SC" {{ old('estado', $dado->endereco->estado ?? '') == 'SC' ? 'selected' : '' }}>Santa Catarina</option>
-                        <option value="SP" {{ old('estado', $dado->endereco->estado ?? '') == 'SP' ? 'selected' : '' }}>São Paulo</option>
-                        <option value="SE" {{ old('estado', $dado->endereco->estado ?? '') == 'SE' ? 'selected' : '' }}>Sergipe</option>
-                        <option value="TO" {{ old('estado', $dado->endereco->estado ?? '') == 'TO' ? 'selected' : '' }}>Tocantins</option>
+                        <option value="AC" {{ old('estado', $dado->estado ?? '') == 'AC' ? 'selected' : '' }}>Acre</option>
+                        <option value="AL" {{ old('estado', $dado->estado ?? '') == 'AL' ? 'selected' : '' }}>Alagoas</option>
+                        <option value="AP" {{ old('estado', $dado->estado ?? '') == 'AP' ? 'selected' : '' }}>AmapÃ¡</option>
+                        <option value="AM" {{ old('estado', $dado->estado ?? '') == 'AM' ? 'selected' : '' }}>Amazonas</option>
+                        <option value="BA" {{ old('estado', $dado->estado ?? '') == 'BA' ? 'selected' : '' }}>Bahia</option>
+                        <option value="CE" {{ old('estado', $dado->estado ?? '') == 'CE' ? 'selected' : '' }}>CearÃ¡</option>
+                        <option value="DF" {{ old('estado', $dado->estado ?? '') == 'DF' ? 'selected' : '' }}>Distrito Federal</option>
+                        <option value="ES" {{ old('estado', $dado->estado ?? '') == 'ES' ? 'selected' : '' }}>EspÃ­rito Santo</option>
+                        <option value="GO" {{ old('estado', $dado->estado ?? '') == 'GO' ? 'selected' : '' }}>GoiÃ¡s</option>
+                        <option value="MA" {{ old('estado', $dado->estado ?? '') == 'MA' ? 'selected' : '' }}>MaranhÃ£o</option>
+                        <option value="MT" {{ old('estado', $dado->estado ?? '') == 'MT' ? 'selected' : '' }}>Mato Grosso</option>
+                        <option value="MS" {{ old('estado', $dado->estado ?? '') == 'MS' ? 'selected' : '' }}>Mato Grosso do Sul</option>
+                        <option value="MG" {{ old('estado', $dado->estado ?? '') == 'MG' ? 'selected' : '' }}>Minas Gerais</option>
+                        <option value="PA" {{ old('estado', $dado->estado ?? '') == 'PA' ? 'selected' : '' }}>ParÃ¡</option>
+                        <option value="PB" {{ old('estado', $dado->estado ?? '') == 'PB' ? 'selected' : '' }}>ParaÃ­ba</option>
+                        <option value="PR" {{ old('estado', $dado->estado ?? '') == 'PR' ? 'selected' : '' }}>ParanÃ¡</option>
+                        <option value="PE" {{ old('estado', $dado->estado ?? '') == 'PE' ? 'selected' : '' }}>Pernambuco</option>
+                        <option value="PI" {{ old('estado', $dado->estado ?? '') == 'PI' ? 'selected' : '' }}>PiauÃ­</option>
+                        <option value="RJ" {{ old('estado', $dado->estado ?? '') == 'RJ' ? 'selected' : '' }}>Rio de Janeiro</option>
+                        <option value="RN" {{ old('estado', $dado->estado ?? '') == 'RN' ? 'selected' : '' }}>Rio Grande do Norte</option>
+                        <option value="RS" {{ old('estado', $dado->estado ?? '') == 'RS' ? 'selected' : '' }}>Rio Grande do Sul</option>
+                        <option value="RO" {{ old('estado', $dado->estado ?? '') == 'RO' ? 'selected' : '' }}>RondÃ´nia</option>
+                        <option value="RR" {{ old('estado', $dado->estado ?? '') == 'RR' ? 'selected' : '' }}>Roraima</option>
+                        <option value="SC" {{ old('estado', $dado->estado ?? '') == 'SC' ? 'selected' : '' }}>Santa Catarina</option>
+                        <option value="SP" {{ old('estado', $dado->estado ?? '') == 'SP' ? 'selected' : '' }}>SÃ£o Paulo</option>
+                        <option value="SE" {{ old('estado', $dado->estado ?? '') == 'SE' ? 'selected' : '' }}>Sergipe</option>
+                        <option value="TO" {{ old('estado', $dado->estado ?? '') == 'TO' ? 'selected' : '' }}>Tocantins</option>
                     </select>
                 </div>
             </div>
-            {{-- Preferências --}}
+            {{-- PreferÃªncias --}}
             <div class="row">
 
                 <div class="col">
-                    <label class="form-label">Preferências de Compra </label>
+                    <label class="form-label">PreferÃªncias de Compra </label>
                     <input type="text" class="form-control" name="preferenciadecompra"
-                        value="{{ old('preferenciadecompra', $dado->historico->preferenciadecompra ?? '') }}">
+                        value="{{ old('preferenciadecompra', $dado->preferenciadecompra ?? '') }}">
                 </div>
 
                 <div class="col">
-                    <label class="form-label">Observações</label>
+                    <label class="form-label">ObservaÃ§Ãµes</label>
                     <input type="text" class="form-control" name="observacoes"
-                        value="{{ old('observacoes', $dado->historico->observacoes ?? '') }}">
+                        value="{{ old('observacoes', $dado->observacoes ?? '') }}">
                 </div>
                 <div class="col">
-                    <label class="form-label">Número de visitas</label>
+                    <label class="form-label">NÃºmero de visitas</label>
                     <input type="number" class="form-control" name="numero_visitas"
-                        value="{{ old('numero_visitas', $dado->endereco->numero_visitas ?? 0) }}" min="0">
+                        value="{{ old('numero_visitas', $dado->numero_visitas ?? 0) }}" min="0">
                 </div>
                 <div class="col">
-                    <label class="form-label">Data da ùltima Visita</label>
+                    <label class="form-label">Data da Ã¹ltima Visita</label>
                     <input type="date" class="form-control" name="data_ultima_visita"
-                        value="{{ old('data_ultima_visita', isset($dado->endereco->data_ultima_visita) ? \Carbon\Carbon::parse($dado->endereco->data_ultima_visita)->format('Y-m-d') : '') }}">
+                        value="{{ old('data_ultima_visita', isset($dado->data_ultima_visita) ? \Carbon\Carbon::parse($dado->data_ultima_visita)->format('Y-m-d') : '') }}">
                 </div>
                 <div class="col">
                     <label class="form-label">Cliente fidelizado</label>
                     <select class="form-select" name="cliente_fidelizado">
-                        <option value="0" {{ old('cliente_fidelizado', $dado->endereco->cliente_fidelizado ?? 0) == 0 ? 'selected' : '' }}>
-                            Não
+                        <option value="0" {{ old('cliente_fidelizado', $dado->cliente_fidelizado ?? 0) == 0 ? 'selected' : '' }}>
+                            NÃ£o
                         </option>
-                        <option value="1" {{ old('cliente_fidelizado', $dado->endereco->cliente_fidelizado ?? 0) == 1 ? 'selected' : '' }}>
+                        <option value="1" {{ old('cliente_fidelizado', $dado->cliente_fidelizado ?? 0) == 1 ? 'selected' : '' }}>
                             Sim
                         </option>
                     </select>
                 </div>
                 <div class="col">
-                    <label class="form-label">Nível de Fidelidade</label>
+                    <label class="form-label">NÃ­vel de Fidelidade</label>
                     <select class="form-select" name="nivel_fidelidade">
-                        <option value="0" {{ old('nivel_fidelidade', $dado->endereco->nivel_fidelidade ?? 0) == 0 ? 'selected' : '' }}>
+                        <option value="0" {{ old('nivel_fidelidade', $dado->nivel_fidelidade ?? 0) == 0 ? 'selected' : '' }}>
                             Bronze
                         </option>
-                        <option value="1" {{ old('nivel_fidelidade', $dado->endereco->nivel_fidelidade ?? 0) == 1 ? 'selected' : '' }}>
+                        <option value="1" {{ old('nivel_fidelidade', $dado->nivel_fidelidade ?? 0) == 1 ? 'selected' : '' }}>
                             Prata
                         </option>
-                        <option value="2" {{ old('nivel_fidelidade', $dado->endereco->nivel_fidelidade ?? 0) == 2 ? 'selected' : '' }}>
+                        <option value="2" {{ old('nivel_fidelidade', $dado->nivel_fidelidade ?? 0) == 2 ? 'selected' : '' }}>
                             Ouro
                         </option>
                     </select>
@@ -207,3 +207,4 @@
 
 </div>
 @stop
+

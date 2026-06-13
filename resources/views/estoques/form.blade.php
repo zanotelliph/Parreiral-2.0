@@ -11,7 +11,15 @@
 <form method="POST" action="{{ isset($estoque) ? route('estoques.update', $estoque) : route('estoques.store') }}" enctype="multipart/form-data">
   @csrf
   @if(isset($estoque)) @method('PUT') @endif
-  <div class="mb-3"><label class="form-label">ID do produto</label><input type="number" class="form-control" name="produto_id" value="{{ old('produto_id', $estoque->produto_id ?? '') }}" required></div>
+  <div class="mb-3">
+    <label class="form-label">Produto</label>
+    <select class="form-select" name="produto_id" required>
+      <option value="">Selecione o produto</option>
+      @foreach($produtos as $produto)
+        <option value="{{ $produto->id }}" @selected(old('produto_id', $estoque->produto_id ?? '') == $produto->id)>{{ $produto->nome }}</option>
+      @endforeach
+    </select>
+  </div>
   <div class="mb-3"><label class="form-label">Quantidade</label><input type="number" class="form-control" name="quantidade" value="{{ old('quantidade', $estoque->quantidade ?? 0) }}" required></div>
   <div class="mb-3"><label class="form-label">Foto do produto</label><input type="file" class="form-control" name="foto" accept="image/png,image/jpeg,image/jpg"></div>
   <div class="mb-3"><label class="form-label">Lote</label><input class="form-control" name="lote" value="{{ old('lote', $estoque->lote ?? '') }}"></div>

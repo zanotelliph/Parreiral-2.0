@@ -11,8 +11,13 @@ class DashboardController extends Controller
 {
     public function index()
     {
+        $driver = DB::connection()->getDriverName();
+        $mesExpression = $driver === 'sqlite'
+            ? "CAST(strftime('%m', data_compra) AS INTEGER)"
+            : 'MONTH(data_compra)';
+
         $comprasPorMes = CompraProduto::query()
-            ->selectRaw('MONTH(data_compra) as mes, SUM(valor_total) as total')
+            ->selectRaw($mesExpression . ' as mes, SUM(valor_total) as total')
             ->whereYear('data_compra', now()->year)
             ->groupBy('mes')
             ->orderBy('mes')

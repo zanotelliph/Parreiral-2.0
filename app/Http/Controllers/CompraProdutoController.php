@@ -6,11 +6,12 @@ use App\Models\Cliente;
 use App\Models\CompraProduto;
 use App\Models\Produto;
 use Illuminate\Http\Request;
-use App\Charts\ProdutoMaisComprado;
+use ArielMejiaDev\LarapexCharts\LarapexChart;
+use Illuminate\Support\Facades\DB;
 
 class CompraProdutoController extends Controller
 {
-    public function index(Request $request, ProdutoMaisComprado $chart)
+    public function index(Request $request, LarapexChart $chart)
     {
         $q = trim($request->input('q', ''));
 
@@ -30,7 +31,7 @@ class CompraProdutoController extends Controller
         return view('compras-produtos.index', [
             'compras' => $compras,
             'q' => $q,
-            'chart' => $chart->build(),
+            'chart' => $this->produtoMaisCompradoChart($chart),
         ]);
     }
 
@@ -51,9 +52,10 @@ class CompraProdutoController extends Controller
             'quantidade' => 'required|integer|min:1',
             'valor_total' => 'required|numeric',
             'data_compra' => 'required|date',
+            'observacao' => 'nullable',
         ]);
 
-        CompraProduto::create($data);
+        CompraProduto::create($this->prepararDadosCompra($data));
 
         return redirect()->route('compras-produtos.index')
             ->with('success', 'Compra registrada com sucesso.');
@@ -61,7 +63,15 @@ class CompraProdutoController extends Controller
 
     public function edit(CompraProduto $compraProduto)
     {
-        return view('compras-produtos.form', compact('compraProduto'));
+        $clientes = Cliente::orderBy('nome')->get();
+        $produtos = Produto::orderBy('nome')->get();
+
+        return view('compras-produtos.form', compact('compraProduto', 'clientes', 'produtos'));
+    }
+
+    public function show(CompraProduto $compraProduto)
+    {
+        return redirect()->route('compras-produtos.index');
     }
 
     public function update(Request $request, CompraProduto $compraProduto)
@@ -76,7 +86,7 @@ class CompraProdutoController extends Controller
             'observacao' => 'nullable',
         ]);
 
-        $compraProduto->update($data);
+        $compraProduto->update($this->prepararDadosCompra($data));
 
         return redirect()->route('compras-produtos.index')
             ->with('success', 'Compra atualizada com sucesso.');
@@ -90,10 +100,39 @@ class CompraProdutoController extends Controller
             ->with('success', 'Compra removida com sucesso.');
     }
 
-    public function chart(ProdutoMaisComprado $chart)
+    public function chart(LarapexChart $chart)
     {
         return view('compras-produtos.chart', [
-            'chart' => $chart->build()
+            'chart' => $this->produtoMaisCompradoChart($chart)
         ]);
+    }
+
+    private function prepararDadosCompra(array $data): array
+    {
+        $produto = Produto::find($data['produto_id']);
+
+        $data['item_compra'] = $data['item_compra'] ?? $produto?->nome ?? 'Produto';
+        $data['custo_compra'] = $data['custo_compra'] ?? $data['valor_total'];
+        $data['forma_pagamento'] = $data['forma_pagamento'] ?? 'Não informado';
+        $data['parcelas'] = $data['parcelas'] ?? 1;
+        $data['desconto'] = $data['desconto'] ?? 0;
+        $data['descricao'] = $data['descricao'] ?? $data['observacao'] ?? null;
+
+        return $data;
+    }
+
+    private function produtoMaisCompradoChart(LarapexChart $chart): \ArielMejiaDev\LarapexCharts\PieChart
+    {
+        $produtoPorCompra = DB::table('compras_produtos')
+            ->select('item_compra', DB::raw('COUNT(*) as total'))
+            ->groupBy('item_compra')
+            ->orderByDesc('total')
+            ->get();
+
+        return $chart->pieChart()
+            ->setTitle('Produto Mais Comprado')
+            ->setSubtitle('Compras registradas')
+            ->addData($produtoPorCompra->pluck('total')->map(fn ($total) => (int) $total)->all())
+            ->setLabels($produtoPorCompra->pluck('item_compra')->all());
     }
 }

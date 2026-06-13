@@ -7,8 +7,6 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EstoqueController;
 use App\Http\Controllers\EventoController;
 //use App\Http\Controllers\DashboardController;
-use App\Charts\ProdutoMaisComprado;
-
 use App\Http\Controllers\ProdutoController;
 use App\Http\Controllers\RelatorioController;
 use App\Http\Controllers\ReservaEventoController;
@@ -39,11 +37,6 @@ Route::resource('eventos', EventoController::class);
 Route::resource('compras-produtos', CompraProdutoController::class);
 Route::resource('estoques', EstoqueController::class);
 // Route::get('/dashboard', [DashboardController::class, 'index']);
-// Route::get('/', function (ProdutoMaisComprado $chart) {
-//     return view('dashboard', [
-//         'chart' => $chart->build()
-//     ]);
-// });
 Route::get(
     'compras-produtos/chart',
     [CompraProdutoController::class, 'chart']
