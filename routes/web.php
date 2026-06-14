@@ -31,12 +31,6 @@ Route::get('relatorios/clientes', [RelatorioController::class, 'clientes'])->nam
 Route::get('relatorios/clientes/pdf', [RelatorioController::class, 'clientesPdf'])->name('relatorios.clientes.pdf');
 
 
-Route::resource('produto', ProdutoController::class);
-Route::resource('reservas-eventos', ReservaEventoController::class);
-Route::resource('eventos', EventoController::class);
-Route::resource('compras-produtos', CompraProdutoController::class);
-Route::resource('estoques', EstoqueController::class);
-// Route::get('/dashboard', [DashboardController::class, 'index']);
 Route::get(
     'compras-produtos/chart',
     [CompraProdutoController::class, 'chart']
@@ -45,3 +39,9 @@ Route::get(
     'reservas-eventos/chart',
     [ReservaEventoController::class, 'chart']
 )->name('reservas-eventos.chart');
+Route::resource('produto', ProdutoController::class);
+Route::resource('reservas-eventos', ReservaEventoController::class);
+Route::resource('eventos', EventoController::class);
+Route::resource('compras-produtos', CompraProdutoController::class);
+Route::resource('estoques', EstoqueController::class);
+// Route::get('/dashboard', [DashboardController::class, 'index']);

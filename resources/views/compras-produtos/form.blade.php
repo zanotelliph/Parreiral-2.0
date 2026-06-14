@@ -8,7 +8,7 @@
 ])
 
 <div class="content-panel">
-<form method="POST" action="{{ isset($compraProduto) ? route('compras-produtos.update', $compraProduto) : route('compras-produtos.store') }}">
+<form method="POST" action="{{ isset($compraProduto) ? route('compras-produtos.update', ['compras_produto' => $compraProduto->id]) : route('compras-produtos.store') }}">
   @csrf
   @if(isset($compraProduto)) @method('PUT') @endif
   <div class="mb-3">

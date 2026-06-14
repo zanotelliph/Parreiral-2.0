@@ -40,8 +40,8 @@ class ClienteController extends Controller
             'email' => 'required|email',
             'telefone' => 'required|string|max:20',
 
-            'cpf' => 'nullable|string|max:20',
-            'endereco' => 'nullable|string',
+            'cpf' => 'required|string|max:16',
+            'endereco' => 'required|string|max:300',
 
             'imagem' => 'nullable|image|mimes:png,jpg,jpeg|max:5120',
 

@@ -61,20 +61,22 @@ class CompraProdutoController extends Controller
             ->with('success', 'Compra registrada com sucesso.');
     }
 
-    public function edit(CompraProduto $compraProduto)
+    public function edit(CompraProduto $compras_produto)
     {
         $clientes = Cliente::orderBy('nome')->get();
         $produtos = Produto::orderBy('nome')->get();
 
+        $compraProduto = $compras_produto;
+
         return view('compras-produtos.form', compact('compraProduto', 'clientes', 'produtos'));
     }
 
-    public function show(CompraProduto $compraProduto)
+    public function show(CompraProduto $compras_produto)
     {
         return redirect()->route('compras-produtos.index');
     }
 
-    public function update(Request $request, CompraProduto $compraProduto)
+    public function update(Request $request, CompraProduto $compras_produto)
     {
         $data = $request->validate([
             'cliente_id' => 'required|exists:cliente,id',
@@ -86,15 +88,15 @@ class CompraProdutoController extends Controller
             'observacao' => 'nullable',
         ]);
 
-        $compraProduto->update($this->prepararDadosCompra($data));
+        $compras_produto->update($this->prepararDadosCompra($data));
 
         return redirect()->route('compras-produtos.index')
             ->with('success', 'Compra atualizada com sucesso.');
     }
 
-    public function destroy(CompraProduto $compraProduto)
+    public function destroy(CompraProduto $compras_produto)
     {
-        $compraProduto->delete();
+        $compras_produto->delete();
 
         return redirect()->route('compras-produtos.index')
             ->with('success', 'Compra removida com sucesso.');
@@ -109,14 +111,6 @@ class CompraProdutoController extends Controller
 
     private function prepararDadosCompra(array $data): array
     {
-        $produto = Produto::find($data['produto_id']);
-
-        $data['item_compra'] = $data['item_compra'] ?? $produto?->nome ?? 'Produto';
-        $data['custo_compra'] = $data['custo_compra'] ?? $data['valor_total'];
-        $data['forma_pagamento'] = $data['forma_pagamento'] ?? 'Não informado';
-        $data['parcelas'] = $data['parcelas'] ?? 1;
-        $data['desconto'] = $data['desconto'] ?? 0;
-        $data['descricao'] = $data['descricao'] ?? $data['observacao'] ?? null;
 
         return $data;
     }
@@ -124,8 +118,12 @@ class CompraProdutoController extends Controller
     private function produtoMaisCompradoChart(LarapexChart $chart): \ArielMejiaDev\LarapexCharts\PieChart
     {
         $produtoPorCompra = DB::table('compras_produtos')
-            ->select('item_compra', DB::raw('COUNT(*) as total'))
-            ->groupBy('item_compra')
+            ->leftJoin('produtos', 'produtos.id', '=', 'compras_produtos.produto_id')
+            ->select(
+                DB::raw('COALESCE(produtos.nome, CONCAT("Produto #", compras_produtos.produto_id)) as produto_nome'),
+                DB::raw('COUNT(*) as total')
+            )
+            ->groupBy('produto_nome')
             ->orderByDesc('total')
             ->get();
 
@@ -133,6 +131,6 @@ class CompraProdutoController extends Controller
             ->setTitle('Produto Mais Comprado')
             ->setSubtitle('Compras registradas')
             ->addData($produtoPorCompra->pluck('total')->map(fn ($total) => (int) $total)->all())
-            ->setLabels($produtoPorCompra->pluck('item_compra')->all());
+            ->setLabels($produtoPorCompra->pluck('produto_nome')->all());
     }
 }

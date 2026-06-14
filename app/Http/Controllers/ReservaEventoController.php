@@ -58,17 +58,19 @@ class ReservaEventoController extends Controller
         return redirect()->route('reservas-eventos.index')->with('success', 'Reserva registrada com sucesso.');
     }
 
-    public function edit(ReservaEvento $reservaEvento)
+    public function edit(ReservaEvento $reservas_evento)
     {
+        $reservaEvento = $reservas_evento;
+
         return view('reservas-eventos.form', compact('reservaEvento'));
     }
 
-    public function show(ReservaEvento $reservaEvento)
+    public function show(ReservaEvento $reservas_evento)
     {
         return redirect()->route('reservas-eventos.index');
     }
 
-    public function update(Request $request, ReservaEvento $reservaEvento)
+    public function update(Request $request, ReservaEvento $reservas_evento)
     {
         $data = $request->validate([
             'nome_cliente' => 'required',
@@ -83,14 +85,14 @@ class ReservaEventoController extends Controller
             'status' => 'nullable|string|max:50',
         ]);
 
-        $reservaEvento->update($data);
+        $reservas_evento->update($data);
 
         return redirect()->route('reservas-eventos.index')->with('success', 'Reserva atualizada com sucesso.');
     }
 
-    public function destroy(ReservaEvento $reservaEvento)
+    public function destroy(ReservaEvento $reservas_evento)
     {
-        $reservaEvento->delete();
+        $reservas_evento->delete();
 
         return redirect()->route('reservas-eventos.index')->with('success', 'Reserva removida com sucesso.');
     }

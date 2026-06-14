@@ -8,7 +8,7 @@
 ])
 
 <div class="content-panel">
-<form method="POST" action="{{ isset($reservaEvento) ? route('reservas-eventos.update', $reservaEvento) : route('reservas-eventos.store') }}">
+<form method="POST" action="{{ isset($reservaEvento) ? route('reservas-eventos.update', ['reservas_evento' => $reservaEvento->id]) : route('reservas-eventos.store') }}">
   @csrf
   @if(isset($reservaEvento)) @method('PUT') @endif
   <div class="mb-3"><label class="form-label">Nome do cliente</label><input class="form-control" name="nome_cliente" value="{{ old('nome_cliente', $reservaEvento->nome_cliente ?? '') }}" required></div>
