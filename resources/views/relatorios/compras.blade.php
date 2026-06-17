@@ -1,95 +1,77 @@
 @extends('main')
-
 @section('titulo', 'Relatório de Compras')
-
 @section('conteudo')
+
 @include('partials.page-header', [
     'title' => 'Relatório de Compras',
-    'subtitle' => 'Compras vinculadas aos clientes com filtros por período',
+    'subtitle' => 'Análise de movimentações e insumos da vinícola',
 ])
 
-<div class="content-panel">
-    <div class="d-flex flex-wrap gap-2 justify-content-end mb-4">
-        <a href="{{ url('/') }}" class="btn btn-secondary">Voltar ao painel</a>
-    </div>
-
-    <form class="row g-3 mb-4" method="GET" action="{{ route('relatorios.compras') }}">
-        <div class="col-md-3">
-            <label class="form-label">Data início</label>
-            <input type="date" name="data_inicio" class="form-control" value="{{ $dataInicio }}">
+<div class="content-panel mb-4">
+    <form method="GET" action="{{ route('relatorios.compras') }}" class="row g-2">
+        <div class="col-12 col-md-5">
+            <label class="form-label fw-bold">Data Início</label>
+            <input type="date" name="data_inicio" value="{{ $dataInicio }}" class="form-control">
         </div>
-        <div class="col-md-3">
-            <label class="form-label">Data fim</label>
-            <input type="date" name="data_fim" class="form-control" value="{{ $dataFim }}">
+        <div class="col-12 col-md-5">
+            <label class="form-label fw-bold">Data Fim</label>
+            <input type="date" name="data_fim" value="{{ $dataFim }}" class="form-control">
         </div>
-        <div class="col-md-4">
-            <label class="form-label">Cliente</label>
-            <select name="cliente_id" class="form-select">
-                <option value="">Todos os clientes</option>
-                @foreach($clientes as $cliente)
-                    <option value="{{ $cliente->id }}" @selected($clienteId == $cliente->id)>{{ $cliente->nome }}</option>
-                @endforeach
-            </select>
-        </div>
-        <div class="col-md-2 d-flex align-items-end">
+        <div class="col-12 col-md-2 d-grid d-md-flex align-items-end">
             <button class="btn btn-primary w-100">Filtrar</button>
         </div>
     </form>
+</div>
 
-    <div class="row g-3 mb-4">
-        <div class="col-md-6">
-            <div class="card card-parreiral stat-card">
-                <div class="card-body">
-                    <p class="stat-label mb-1">Total de registros</p>
-                    <p class="stat-value mb-0">{{ $compras->count() }}</p>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-6">
-            <div class="card card-parreiral-gold stat-card">
-                <div class="card-body">
-                    <p class="stat-label mb-1">Valor total filtrado</p>
-                    <p class="stat-value mb-0">R$ {{ number_format($totalGeral, 2, ',', '.') }}</p>
-                </div>
+<div class="row g-3 mb-4">
+    <div class="col-12 col-md-6">
+        <div class="card bg-light border-0 shadow-sm">
+            <div class="card-body text-center p-4">
+                <h6 class="text-muted text-uppercase small mb-2">Total de Itens Comprados</h6>
+                <h3 class="fw-bold text-dark mb-0">{{ $totalQuantidade }}</h3>
             </div>
         </div>
     </div>
+    <div class="col-12 col-md-6">
+        <div class="card bg-light border-0 shadow-sm">
+            <div class="card-body text-center p-4">
+                <h6 class="text-muted text-uppercase small mb-2">Valor Total Investido</h6>
+                <h3 class="fw-bold text-success mb-0">R$ {{ number_format($totalGeral, 2, ',', '.') }}</h3>
+            </div>
+        </div>
+    </div>
+</div>
 
+<div class="content-panel">
     <div class="table-responsive">
-        <table class="table table-bordered table-striped align-middle mb-0">
-            <thead>
-                <tr>
-                    <th>ID</th><th>Cliente</th><th>Produto</th>
-                    <th>Quantidade</th><th>Valor total</th><th>Data</th>
+        <table class="table table-bordered table-hover align-middle mb-0">
+            <thead class="table-dark"> <tr>
+                    <th>PRODUTO</th>
+                    <th>ITEM COMPRA</th>
+                    <th>PAGAMENTO</th>
+                    <th>QTD</th>
+                    <th>VALOR TOTAL</th>
+                    <th>DATA</th>
                 </tr>
             </thead>
             <tbody>
                 @forelse($compras as $compra)
                     <tr>
-                        <td>{{ $compra->id }}</td>
-                        <td>{{ $compra->cliente?->nome ?? '—' }}</td>
-                        <td>{{ $compra->produto?->nome ?? $compra->produto_id }}</td>
+                        <td>{{ $compra->produto->nome ?? 'Produto #' . $compra->produto_id }}</td>
+                        <td>{{ $compra->item_compra ?? '-' }}</td>
+                        <td>{{ $compra->forma_pagamento ?? '-' }}</td>
                         <td>{{ $compra->quantidade }}</td>
-                        <td>R$ {{ number_format($compra->valor_total, 2, ',', '.') }}</td>
-                        <td>{{ $compra->data_compra?->format('d/m/Y') }}</td>
+                        <td class="text-nowrap">R$ {{ number_format($compra->valor_total, 2, ',', '.') }}</td>
+                        <td class="text-nowrap">{{ $compra->data_compra ? $compra->data_compra->format('d/m/Y') : '-' }}</td>
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="7" class="text-center text-muted py-4">Nenhuma compra encontrada para os filtros selecionados.</td>
+                        <td colspan="6" class="text-center text-muted py-3">Nenhuma compra encontrada para o período selecionado.</td>
                     </tr>
                 @endforelse
             </tbody>
-            @if($compras->isNotEmpty())
-                <tfoot>
-                    <tr class="fw-bold">
-                        <td colspan="3" class="text-end">Totais</td>
-                        <td>{{ $totalQuantidade }}</td>
-                        <td>R$ {{ number_format($totalGeral, 2, ',', '.') }}</td>
-                        <td></td>
-                    </tr>
-                </tfoot>
-            @endif
         </table>
     </div>
 </div>
+
 @endsection

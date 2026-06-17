@@ -104,35 +104,35 @@
                     <option value="">Selecione</option>
                         <option value="AC" {{ old('estado', $dado->estado ?? '') == 'AC' ? 'selected' : '' }}>Acre</option>
                         <option value="AL" {{ old('estado', $dado->estado ?? '') == 'AL' ? 'selected' : '' }}>Alagoas</option>
-                        <option value="AP" {{ old('estado', $dado->estado ?? '') == 'AP' ? 'selected' : '' }}>AmapÃ¡</option>
+                        <option value="AP" {{ old('estado', $dado->estado ?? '') == 'AP' ? 'selected' : '' }}>Amapá</option>
                         <option value="AM" {{ old('estado', $dado->estado ?? '') == 'AM' ? 'selected' : '' }}>Amazonas</option>
                         <option value="BA" {{ old('estado', $dado->estado ?? '') == 'BA' ? 'selected' : '' }}>Bahia</option>
-                        <option value="CE" {{ old('estado', $dado->estado ?? '') == 'CE' ? 'selected' : '' }}>CearÃ¡</option>
+                        <option value="CE" {{ old('estado', $dado->estado ?? '') == 'CE' ? 'selected' : '' }}>Ceará</option>
                         <option value="DF" {{ old('estado', $dado->estado ?? '') == 'DF' ? 'selected' : '' }}>Distrito Federal</option>
-                        <option value="ES" {{ old('estado', $dado->estado ?? '') == 'ES' ? 'selected' : '' }}>EspÃ­rito Santo</option>
-                        <option value="GO" {{ old('estado', $dado->estado ?? '') == 'GO' ? 'selected' : '' }}>GoiÃ¡s</option>
-                        <option value="MA" {{ old('estado', $dado->estado ?? '') == 'MA' ? 'selected' : '' }}>MaranhÃ£o</option>
+                        <option value="ES" {{ old('estado', $dado->estado ?? '') == 'ES' ? 'selected' : '' }}>Espírito Santo</option>
+                        <option value="GO" {{ old('estado', $dado->estado ?? '') == 'GO' ? 'selected' : '' }}>Goiás</option>
+                        <option value="MA" {{ old('estado', $dado->estado ?? '') == 'MA' ? 'selected' : '' }}>Maranhão</option>
                         <option value="MT" {{ old('estado', $dado->estado ?? '') == 'MT' ? 'selected' : '' }}>Mato Grosso</option>
                         <option value="MS" {{ old('estado', $dado->estado ?? '') == 'MS' ? 'selected' : '' }}>Mato Grosso do Sul</option>
                         <option value="MG" {{ old('estado', $dado->estado ?? '') == 'MG' ? 'selected' : '' }}>Minas Gerais</option>
-                        <option value="PA" {{ old('estado', $dado->estado ?? '') == 'PA' ? 'selected' : '' }}>ParÃ¡</option>
-                        <option value="PB" {{ old('estado', $dado->estado ?? '') == 'PB' ? 'selected' : '' }}>ParaÃ­ba</option>
-                        <option value="PR" {{ old('estado', $dado->estado ?? '') == 'PR' ? 'selected' : '' }}>ParanÃ¡</option>
+                        <option value="PA" {{ old('estado', $dado->estado ?? '') == 'PA' ? 'selected' : '' }}>Pará</option>
+                        <option value="PB" {{ old('estado', $dado->estado ?? '') == 'PB' ? 'selected' : '' }}>Paraíba</option>
+                        <option value="PR" {{ old('estado', $dado->estado ?? '') == 'PR' ? 'selected' : '' }}>Paraná</option>
                         <option value="PE" {{ old('estado', $dado->estado ?? '') == 'PE' ? 'selected' : '' }}>Pernambuco</option>
-                        <option value="PI" {{ old('estado', $dado->estado ?? '') == 'PI' ? 'selected' : '' }}>PiauÃ­</option>
+                        <option value="PI" {{ old('estado', $dado->estado ?? '') == 'PI' ? 'selected' : '' }}>Piauí</option>
                         <option value="RJ" {{ old('estado', $dado->estado ?? '') == 'RJ' ? 'selected' : '' }}>Rio de Janeiro</option>
                         <option value="RN" {{ old('estado', $dado->estado ?? '') == 'RN' ? 'selected' : '' }}>Rio Grande do Norte</option>
                         <option value="RS" {{ old('estado', $dado->estado ?? '') == 'RS' ? 'selected' : '' }}>Rio Grande do Sul</option>
-                        <option value="RO" {{ old('estado', $dado->estado ?? '') == 'RO' ? 'selected' : '' }}>RondÃ´nia</option>
+                        <option value="RO" {{ old('estado', $dado->estado ?? '') == 'RO' ? 'selected' : '' }}>Rondônia</option>
                         <option value="RR" {{ old('estado', $dado->estado ?? '') == 'RR' ? 'selected' : '' }}>Roraima</option>
                         <option value="SC" {{ old('estado', $dado->estado ?? '') == 'SC' ? 'selected' : '' }}>Santa Catarina</option>
-                        <option value="SP" {{ old('estado', $dado->estado ?? '') == 'SP' ? 'selected' : '' }}>SÃ£o Paulo</option>
+                        <option value="SP" {{ old('estado', $dado->estado ?? '') == 'SP' ? 'selected' : '' }}>São Paulo</option>
                         <option value="SE" {{ old('estado', $dado->estado ?? '') == 'SE' ? 'selected' : '' }}>Sergipe</option>
                         <option value="TO" {{ old('estado', $dado->estado ?? '') == 'TO' ? 'selected' : '' }}>Tocantins</option>
                     </select>
                 </div>
             </div>
-            {{-- PreferÃªncias --}}
+            {{-- Preferências --}}
             <div class="row">
 
                 <div class="col">
@@ -149,7 +149,7 @@
                 <div class="col">
                     <label class="form-label">Número de visitas</label>
                     <input type="number" class="form-control" name="numero_visitas"
-                        value="{{ old('numero_visitas', $dado->numero_visitas ?? 0) }}" min="0">
+                        value="{{ old('numero_visitas', $dado->numero_visitas ?? 0) }}" min="0" placeholder="Ex: 1, 2, 3...">
                 </div>
                 <div class="col">
                     <label class="form-label">Data da Última Visita</label>

@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Cliente;
 use App\Models\CompraProduto;
 use App\Models\Produto;
 use Illuminate\Http\Request;
@@ -11,18 +10,15 @@ use Illuminate\Support\Facades\DB;
 
 class CompraProdutoController extends Controller
 {
-    public function index(Request $request, LarapexChart $chart)
+    function index(Request $request, LarapexChart $chart)
     {
         $q = trim($request->input('q', ''));
 
         $compras = CompraProduto::query()
-            ->with(['cliente', 'produto'])
+            ->with(['produto'])
             ->when($q !== '', function ($query) use ($q) {
-                $query->where('produto_id', 'like', "%{$q}%")
-                    ->orWhere('observacao', 'like', "%{$q}%")
-                    ->orWhereHas('cliente', fn ($c) =>
-                        $c->where('nome', 'like', "%{$q}%")
-                    );
+                $query->where('item_compra', 'like', "%{$q}%")
+                    ->orWhere('observacao', 'like', "%{$q}%");
             })
             ->latest()
             ->get();
@@ -34,81 +30,72 @@ class CompraProdutoController extends Controller
         ]);
     }
 
-    public function create()
+    function create()
     {
-        $clientes = Cliente::orderBy('nome')->get();
         $produtos = Produto::orderBy('nome')->get();
-
-        return view('compras-produtos.form', compact('clientes', 'produtos'));
+        return view('compras-produtos.form', compact('produtos'));
     }
 
-   function store(Request $request)
-{
-    $data = $request->validate([
-        'cliente_id'   => 'required',
-        'produto_id'   => 'required',
-        'quantidade'   => 'required|integer|min:1',
-        'valor_total'  => 'required|numeric',
-        'data_compra'  => 'required|date',
-        'observacao'   => 'nullable',
-    ]);
-
-    CompraProduto::create($data);
-
-    return redirect('compras-produtos')->with('success', 'Registro cadastrado com sucesso!');
-}
-
-    public function edit(CompraProduto $compras_produto)
+    function store(Request $request)
     {
-        $clientes = Cliente::orderBy('nome')->get();
-        $produtos = Produto::orderBy('nome')->get();
+        $data = $request->validate([
+            'produto_id'      => 'required',
+            'item_compra'     => 'nullable|string',
+            'quantidade'      => 'required|integer|min:1',
+            'custo_compra'    => 'nullable|numeric',
+            'valor_total'     => 'required|numeric',
+            'forma_pagamento' => 'nullable|string',
+            'data_compra'     => 'required|date',
+            'observacao'      => 'nullable',
+        ]);
 
-        $compraProduto = $compras_produto;
+        CompraProduto::create($data);
 
-        return view('compras-produtos.form', compact('compraProduto', 'clientes', 'produtos'));
+        return redirect('compras-produtos')->with('success', 'Compra registrada com sucesso!');
     }
 
-    public function show(CompraProduto $compras_produto)
+    function edit($id)
+    {
+        $compraProduto = CompraProduto::findOrFail($id);
+        $produtos = Produto::orderBy('nome')->get();
+
+        return view('compras-produtos.form', compact('compraProduto', 'produtos'));
+    }
+
+    function update(Request $request, $id)
+    {
+        $data = $request->validate([
+            'produto_id'      => 'required',
+            'item_compra'     => 'nullable|string',
+            'quantidade'      => 'required|integer|min:1',
+            'custo_compra'    => 'nullable|numeric',
+            'valor_total'     => 'required|numeric',
+            'forma_pagamento' => 'nullable|string',
+            'data_compra'     => 'required|date',
+            'observacao'      => 'nullable',
+        ]);
+
+        CompraProduto::findOrFail($id)->update($data);
+
+        return redirect()->route('compras-produtos.index')->with('success', 'Compra atualizada com sucesso.');
+    }
+
+    function destroy($id)
+    {
+        CompraProduto::findOrFail($id)->delete();
+        return redirect()->route('compras-produtos.index')->with('success', 'Compra removida com sucesso.');
+    }
+
+    function show($id)
     {
         return redirect()->route('compras-produtos.index');
     }
 
-    public function update(Request $request, CompraProduto $compras_produto)
-    {
-        $data = $request->validate([
-            'cliente_id' => 'required|exists:cliente,id',
-            'produto_id' => 'required|exists:produtos,id',
-            'quantidade' => 'required|integer|min:1',
-            'valor_total' => 'required|numeric',
-            'data_compra' => 'required|date',
-            'observacao' => 'nullable',
-        ]);
-
-        $compras_produto->update($this->prepararDadosCompra($data));
-
-        return redirect()->route('compras-produtos.index')
-            ->with('success', 'Compra atualizada com sucesso.');
-    }
-
-    public function destroy(CompraProduto $compras_produto)
-    {
-        $compras_produto->delete();
-
-        return redirect()->route('compras-produtos.index')
-            ->with('success', 'Compra removida com sucesso.');
-    }
-
-    public function chart(LarapexChart $chart)
+    function chart(LarapexChart $chart)
     {
         return view('compras-produtos.chart', [
             'chart' => $this->produtoMaisCompradoChart($chart)
         ]);
-    }
-
-    private function prepararDadosCompra(array $data): array
-    {
-
-        return $data;
     }
 
     private function produtoMaisCompradoChart(LarapexChart $chart): \ArielMejiaDev\LarapexCharts\PieChart

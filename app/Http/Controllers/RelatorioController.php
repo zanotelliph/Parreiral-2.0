@@ -25,31 +25,23 @@ class RelatorioController extends Controller
     }
 
 
-    private function dadosCompras(Request $request): array
+private function dadosCompras(Request $request): array
     {
         $dataInicio = $request->input('data_inicio');
         $dataFim = $request->input('data_fim');
-        $clienteId = $request->input('cliente_id');
 
+        
         $compras = CompraProduto::query()
-            ->with(['cliente', 'produto'])
+            ->with(['produto'])
             ->when($dataInicio, fn ($q) => $q->whereDate('data_compra', '>=', $dataInicio))
             ->when($dataFim, fn ($q) => $q->whereDate('data_compra', '<=', $dataFim))
-            ->when($clienteId, fn ($q) => $q->where('cliente_id', $clienteId))
             ->orderByDesc('data_compra')
             ->get();
 
-        $clienteFiltrado = $clienteId
-            ? Cliente::find($clienteId)?->nome
-            : null;
-
         return [
             'compras' => $compras,
-            'clientes' => Cliente::orderBy('nome')->get(),
             'dataInicio' => $dataInicio,
             'dataFim' => $dataFim,
-            'clienteId' => $clienteId,
-            'clienteFiltrado' => $clienteFiltrado,
             'totalGeral' => $compras->sum('valor_total'),
             'totalQuantidade' => $compras->sum('quantidade'),
         ];

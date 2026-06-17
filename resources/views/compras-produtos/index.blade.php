@@ -30,32 +30,42 @@
         <table class="table table-bordered table-hover mb-0">
             <thead>
                 <tr>
-                    <th>Quantidade</th><th>Valor total</th><th>Data</th><th>Ações</th>
-                </tr>
-            </thead>
-            <tbody>
-                @forelse($compras as $item)
-                    <tr>
-                        <td>{{ $item->id }}</td>
-                        <td>{{ $item->cliente?->nome ?? '-' }}</td>
-                        <td>{{ $item->produto?->nome ?? $item->item_compra ?? $item->produto_id }}</td>
-                        <td>{{ $item->quantidade }}</td>
-                        <td>R$ {{ number_format($item->valor_total, 2, ',', '.') }}</td>
-                        <td>{{ $item->data_compra?->format('d/m/Y') }}</td>
-                        <td>
-                            <a class="btn btn-sm btn-primary" href="{{ route('compras-produtos.edit', $item) }}">Editar</a>
-                            <form class="d-inline" method="POST" action="{{ route('compras-produtos.destroy', $item) }}" onsubmit="return confirm('Excluir?')">
-                                @csrf @method('DELETE')
-                                <button class="btn btn-sm btn-danger">Excluir</button>
+                <th>PRODUTO</th>
+                <th>ITEM COMPRA</th>
+                <th>PAGAMENTO</th>
+                <th>QTD</th>
+                <th>VALOR TOTAL</th>
+                <th>DATA</th>
+                <th>AÇÕES</th>
+            </tr>
+        </thead>
+        <tbody>
+            @forelse($compras as $compra)
+                <tr>
+                    <td>{{ $compra->produto->nome ?? 'Produto #' . $compra->produto_id }}</td>
+                    <td>{{ $compra->item_compra ?? '-' }}</td>
+                    <td>{{ $compra->forma_pagamento ?? '-' }}</td>
+                    <td>{{ $compra->quantidade }}</td>
+                    <td class="text-nowrap">R$ {{ number_format($compra->valor_total, 2, ',', '.') }}</td>
+                    <td class="text-nowrap">{{ $compra->data_compra ? $compra->data_compra->format('d/m/Y') : '-' }}</td>
+                    <td>
+                        <div class="d-grid d-sm-flex gap-2">
+                            <a class="btn btn-sm btn-primary" href="{{ route('compras-produtos.edit', $compra->id) }}">Editar</a>
+                            <form method="POST" action="{{ route('compras-produtos.destroy', $compra->id) }}" onsubmit="return confirm('Excluir?')">
+                                @csrf
+                                @method('DELETE')
+                                <button class="btn btn-sm btn-danger w-100">Excluir</button>
                             </form>
-                        </td>
-                    </tr>
-                @empty
-                    <tr><td colspan="8" class="text-center">Nenhuma compra encontrada.</td></tr>
-                @endforelse
-            </tbody>
-        </table>
-    </div>
+                        </div>
+                    </td>
+                </tr>
+            @empty
+                <tr>
+                    <td colspan="7" class="text-center">Nenhuma compra encontrada.</td>
+                </tr>
+            @endforelse
+        </tbody>
+    </table>
 </div>
 
 @if(isset($chart))
