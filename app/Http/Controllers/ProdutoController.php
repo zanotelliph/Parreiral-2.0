@@ -9,108 +9,123 @@ use Illuminate\Support\Facades\Storage;
 
 class ProdutoController extends Controller
 {
-    public function index(Request $request)
+    function index(Request $request)
     {
-        $q = trim($request->input('q', ''));
+        if (!empty($request->q)) {
+            $dados = Produto::where('nome', 'like', '%' . $request->q . '%')
+                ->orWhere('categoria_produto', 'like', '%' . $request->q . '%')
+                ->orWhere('tipo_uva', 'like', '%' . $request->q . '%')
+                ->orWhere('lote', 'like', '%' . $request->q . '%')
+                ->orWhere('lote_produto', 'like', '%' . $request->q . '%')
+                ->latest()
+                ->get();
+        } else {
+            $dados = Produto::latest()->get();
+        }
 
-        $produtos = Produto::query()
-            ->when($q !== '', function ($query) use ($q) {
-                $query->where('nome', 'like', "%{$q}%")
-                    ->orWhere('categoria_produto', 'like', "%{$q}%")
-                    ->orWhere('tipo_uva', 'like', "%{$q}%")
-                    ->orWhere('lote', 'like', "%{$q}%")
-                    ->orWhere('lote_produto', 'like', "%{$q}%");
-            })
-            ->latest()
-            ->get();
-
-        return view('produto.index', compact('produtos', 'q'));
+        return view('produto.index', ['produtos' => $dados, 'q' => $request->q]);
     }
 
-    public function create()
+    function create()
     {
         return view('produto.form', [
             'dado' => new Produto()
         ]);
     }
 
-    public function store(Request $request)
+    function validateRequest(Request $request)
     {
-        $data = $this->validatedData($request);
+        $request->validate([
+            'nome' => 'required|max:100',
+            'categoria_produto' => 'nullable|max:100',
+            'tipo_uva' => 'nullable|max:100',
+            'lote_produto' => 'nullable|max:100',
+            'preco_produto' => 'nullable|numeric',
+            'desconto_promocao' => 'nullable|numeric',
+            'quantidade_disp' => 'nullable|integer|min:0',
+            'imagem' => 'nullable|image|mimes:png,jpg,jpeg|max:5120',
+            'descricao' => 'nullable|string',
+        ], [
+            'nome.required' => "O :attribute é obrigatório",
+            'imagem.image' => "O :attribute deve ser uma imagem válida",
+            'imagem.mimes' => "O :attribute deve ser das extensões: PNG, JPEG e JPG",
+        ]);
+    }
 
-        if ($request->hasFile('imagem')) {
-            $data['imagem'] = $request->file('imagem')->store('imagem/produto', 'public');
+    function store(Request $request)
+    {
+        $this->validateRequest($request);
+        $data = $request->all();
+        $imagem = $request->file('imagem');
+
+        if ($imagem) {
+            $nome_imagem = date('YmdiHs') . "." . $imagem->getClientOriginalExtension();
+            $diretorio = "imagem/produto/";
+            $imagem->storeAs($diretorio, $nome_imagem, 'public');
+
+            $data['imagem'] = $diretorio . $nome_imagem;
         }
 
         Produto::create($data);
 
-        return redirect()->route('produto.index')
-            ->with('success', 'Produto cadastrado com sucesso.');
+        return redirect()->route('produto.index')->with('success', 'Registro cadastrado com sucesso!');
     }
 
-    public function edit(Produto $produto)
+    function edit($id)
     {
-        return view('produto.form', ['dado' => $produto]);
+        $dado = Produto::find($id);
+
+        return view('produto.form', ['dado' => $dado]);
     }
 
-    public function update(Request $request, Produto $produto)
+    function update(Request $request, $id)
     {
-        $data = $this->validatedData($request);
+        $this->validateRequest($request);
+        $data = $request->all();
+        $produto = Produto::find($id);
+        $imagem = $request->file('imagem');
 
-        if ($request->hasFile('imagem')) {
+        if ($imagem) {
             if ($produto->imagem) {
                 Storage::disk('public')->delete($produto->imagem);
             }
 
-            $data['imagem'] = $request->file('imagem')->store('imagem/produto', 'public');
+            $nome_imagem = date('YmdiHs') . "." . $imagem->getClientOriginalExtension();
+            $diretorio = "imagem/produto/";
+            $imagem->storeAs($diretorio, $nome_imagem, 'public');
+
+            $data['imagem'] = $diretorio . $nome_imagem;
         }
 
         $produto->update($data);
 
-        return redirect()->route('produto.index')
-            ->with('success', 'Produto atualizado com sucesso.');
+        return redirect()->route('produto.index')->with('success', 'Registro atualizado com sucesso!');
     }
 
-    public function destroy(Produto $produto)
+    function destroy($id)
     {
+        $produto = Produto::find($id);
+
         if ($produto->imagem) {
             Storage::disk('public')->delete($produto->imagem);
         }
 
-        $produto->delete();
+        Produto::destroy($id);
 
-        return redirect()->route('produto.index')
-            ->with('success', 'Produto removido com sucesso.');
+        return redirect()->route('produto.index')->with('success', 'Registro removido com sucesso!');
     }
 
-    public function show(Produto $produto)
+    function show($id)
     {
         return redirect()->route('produto.index');
     }
 
-    public function pdf()
+    function pdf()
     {
         $produtos = Produto::all();
 
         $pdf = Pdf::loadView('produto.pdf', compact('produtos'));
 
         return $pdf->download('produtos.pdf');
-    }
-
-    private function validatedData(Request $request): array
-    {
-        return $request->validate([
-            'nome' => 'required|string|max:100',
-            'categoria_produto' => 'nullable|string|max:100',
-            'tipo_uva' => 'nullable|string|max:100',
-            'lote' => 'nullable|string|max:100',
-            'lote_produto' => 'nullable|string|max:100',
-            'preco' => 'nullable|numeric',
-            'preco_produto' => 'nullable|numeric',
-            'desconto_promocao' => 'nullable|numeric',
-            'quantidade_disponivel' => 'nullable|integer|min:0',
-            'imagem' => 'nullable|image|mimes:png,jpg,jpeg|max:5120',
-            'descricao' => 'nullable|string',
-        ]);
     }
 }

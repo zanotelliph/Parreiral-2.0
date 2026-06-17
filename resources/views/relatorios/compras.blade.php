@@ -10,7 +10,6 @@
 
 <div class="content-panel">
     <div class="d-flex flex-wrap gap-2 justify-content-end mb-4">
-        <a href="{{ route('relatorios.compras.pdf', request()->query()) }}" class="btn btn-danger">Baixar PDF</a>
         <a href="{{ url('/') }}" class="btn btn-secondary">Voltar ao painel</a>
     </div>
 
@@ -60,7 +59,7 @@
         <table class="table table-bordered table-striped align-middle mb-0">
             <thead>
                 <tr>
-                    <th>ID</th><th>Cliente</th><th>Produto</th><th>Fornecedor</th>
+                    <th>ID</th><th>Cliente</th><th>Produto</th>
                     <th>Quantidade</th><th>Valor total</th><th>Data</th>
                 </tr>
             </thead>
@@ -70,7 +69,6 @@
                         <td>{{ $compra->id }}</td>
                         <td>{{ $compra->cliente?->nome ?? '—' }}</td>
                         <td>{{ $compra->produto?->nome ?? $compra->produto_id }}</td>
-                        <td>{{ $compra->fornecedor }}</td>
                         <td>{{ $compra->quantidade }}</td>
                         <td>R$ {{ number_format($compra->valor_total, 2, ',', '.') }}</td>
                         <td>{{ $compra->data_compra?->format('d/m/Y') }}</td>
@@ -84,7 +82,7 @@
             @if($compras->isNotEmpty())
                 <tfoot>
                     <tr class="fw-bold">
-                        <td colspan="4" class="text-end">Totais</td>
+                        <td colspan="3" class="text-end">Totais</td>
                         <td>{{ $totalQuantidade }}</td>
                         <td>R$ {{ number_format($totalGeral, 2, ',', '.') }}</td>
                         <td></td>

@@ -29,7 +29,6 @@
       @endforeach
     </select>
   </div>
-  <div class="mb-3"><label class="form-label">Fornecedor</label><input class="form-control" name="fornecedor" value="{{ old('fornecedor', $compraProduto->fornecedor ?? '') }}" required></div>
   <div class="mb-3"><label class="form-label">Quantidade</label><input type="number" class="form-control" name="quantidade" value="{{ old('quantidade', $compraProduto->quantidade ?? 1) }}" required></div>
   <div class="mb-3"><label class="form-label">Valor total</label><input type="number" step="0.01" class="form-control" name="valor_total" value="{{ old('valor_total', $compraProduto->valor_total ?? 0) }}" required></div>
   <div class="mb-3"><label class="form-label">Data da compra</label><input type="date" class="form-control" name="data_compra" value="{{ old('data_compra', isset($compraProduto) ? $compraProduto->data_compra?->format('Y-m-d') : date('Y-m-d')) }}" required></div>

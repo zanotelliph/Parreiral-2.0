@@ -10,33 +10,19 @@
         <p class="text-white small">Acompanhamento de vendas, relatório de eventos e compras, estoque e clientes.</p>
     </div>
 
-    //relatorios
-
     <div class="row g-4">
         <div class="col-md-6">
-            <div class="card form-card-dark h-100">
-                <div class="card-body">
-                    <h5 class="card-title text-white mb-3">Filtros & Consultas Rápidas</h5>
-                    
-                    <form action="#" method="GET">
-                        <div class="mb-3">
-                            <label class="form-label text-muted small">Selecione o Período</label>
-                            <select class="form-select form-control-dark">
-                                <option>Últimos 7 dias</option>
-                                <option>Últimos 30 dias</option>
-                                <option>Este mês</option>
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label text-muted small">Buscar por Cliente</label>
-                            <input type="text" class="form-control form-control-dark" placeholder="Nome ou CPF...">
-                        </div>
-                        <button type="submit" class="btn btn-neon-green w-100">Filtrar Painel</button>
-                    </form>
-                </div>
-            </div>
+    <div class="card form-card-dark h-100">
+        <div class="card-body d-flex justify-content-center align-items-center">
+            <img
+                src="{{ asset('images/uva.jpg') }}"
+                alt="Uva"
+                class="img-fluid rounded"
+                style="max-height: 350px;"
+            >
         </div>
-
+    </div>
+</div>
         <div class="col-md-6">
             <div class="card form-card-dark h-100">
                 <div class="card-body">

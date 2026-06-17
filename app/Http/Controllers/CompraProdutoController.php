@@ -18,8 +18,7 @@ class CompraProdutoController extends Controller
         $compras = CompraProduto::query()
             ->with(['cliente', 'produto'])
             ->when($q !== '', function ($query) use ($q) {
-                $query->where('fornecedor', 'like', "%{$q}%")
-                    ->orWhere('produto_id', 'like', "%{$q}%")
+                $query->where('produto_id', 'like', "%{$q}%")
                     ->orWhere('observacao', 'like', "%{$q}%")
                     ->orWhereHas('cliente', fn ($c) =>
                         $c->where('nome', 'like', "%{$q}%")
@@ -43,23 +42,21 @@ class CompraProdutoController extends Controller
         return view('compras-produtos.form', compact('clientes', 'produtos'));
     }
 
-    public function store(Request $request)
-    {
-        $data = $request->validate([
-            'cliente_id' => 'required|exists:cliente,id',
-            'produto_id' => 'required|exists:produtos,id',
-            'fornecedor' => 'required',
-            'quantidade' => 'required|integer|min:1',
-            'valor_total' => 'required|numeric',
-            'data_compra' => 'required|date',
-            'observacao' => 'nullable',
-        ]);
+   function store(Request $request)
+{
+    $data = $request->validate([
+        'cliente_id'   => 'required',
+        'produto_id'   => 'required',
+        'quantidade'   => 'required|integer|min:1',
+        'valor_total'  => 'required|numeric',
+        'data_compra'  => 'required|date',
+        'observacao'   => 'nullable',
+    ]);
 
-        CompraProduto::create($this->prepararDadosCompra($data));
+    CompraProduto::create($data);
 
-        return redirect()->route('compras-produtos.index')
-            ->with('success', 'Compra registrada com sucesso.');
-    }
+    return redirect('compras-produtos')->with('success', 'Registro cadastrado com sucesso!');
+}
 
     public function edit(CompraProduto $compras_produto)
     {
@@ -81,7 +78,6 @@ class CompraProdutoController extends Controller
         $data = $request->validate([
             'cliente_id' => 'required|exists:cliente,id',
             'produto_id' => 'required|exists:produtos,id',
-            'fornecedor' => 'required',
             'quantidade' => 'required|integer|min:1',
             'valor_total' => 'required|numeric',
             'data_compra' => 'required|date',

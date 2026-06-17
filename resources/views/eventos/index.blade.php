@@ -38,6 +38,9 @@
                     <th>Termino</th>
                     <th>Limite</th>
                     <th>Valor 1</th>
+                    <th>Valor 2</th>
+                    <th>Valor 3</th>
+                    <th>Descriçãpo</th>
                     <th>Acoes</th>
                 </tr>
             </thead>
@@ -50,6 +53,9 @@
                         <td class="text-nowrap">{{ $item->data_fim }} {{ $item->hora_fim }}</td>
                         <td>{{ $item->limite_pessoas }}</td>
                         <td class="text-nowrap">R$ {{ number_format($item->valor_ingresso_1 ?? 0, 2, ',', '.') }}</td>
+                        <td class="text-nowrap">R$ {{ number_format($item->valor_ingresso_2 ?? 0, 2, ',', '.') }}</td>
+                        <td class="text-nowrap">R$ {{ number_format($item->valor_ingresso_3 ?? 0, 2, ',', '.') }}</td>
+                        <td>{{ $item->descricao }}</td>
                         <td>
                             <div class="d-grid d-sm-flex gap-2">
                                 <a class="btn btn-sm btn-primary" href="{{ route('eventos.edit', $item) }}">Editar</a>

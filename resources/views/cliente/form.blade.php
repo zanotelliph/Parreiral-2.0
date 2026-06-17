@@ -1,10 +1,10 @@
 ﻿@extends('main')
-@section('titulo', 'FormulÃ¡rio cliente')
+@section('titulo', 'Formulário cliente')
 @section('conteudo')
 
 @include('partials.page-header', [
     'title' => !empty($dado->id) ? 'Editar cliente' : 'Novo cliente',
-    'subtitle' => 'Cadastro de clientes da vinÃ­cola',
+    'subtitle' => 'Cadastro de clientes da vinícola',
 ])
 
 <div class="content-panel">
@@ -24,21 +24,15 @@
         @endif
         <div class="row">
             <div class="col-md-4">
-                <label class="form-label">Tipo de documento</label>
-                <select class="form-select" name="tipo_documento">
-                    <option value="cpf" @selected(old('tipo_documento', optional($dado ?? null)->identificador?->tipo_documento ?? 'cpf') === 'cpf')>CPF</option>
-                    <option value="rg" @selected(old('tipo_documento', optional($dado ?? null)->identificador?->tipo_documento) === 'rg')>RG</option>
-                    <option value="outro" @selected(old('tipo_documento', optional($dado ?? null)->identificador?->tipo_documento) === 'outro')>Outro</option>
-                </select>
-            </div>
-            <div class="col-md-4">
-                <label class="form-label">Documento</label>
-                <input type="text" class="form-control" name="documento"
-                    value="{{ old('documento', optional($dado ?? null)->identificador?->documento ?? optional($dado ?? null)->cpf) }}">
-            </div>
+
             <div class="col-md-6">
                 <label for="nome" class="form-label">Nome</label>
                 <input type="text" class="form-control" name="nome" value="{{ old('nome', $dado->nome ?? '') }}" required>
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">cpf</label>
+                <input type="text" class="form-control" name="cpf"
+                    value="{{ old('cpf', $dado->cpf ?? '') }}">
             </div>
             <div class="col-md-6">
                 <label class="form-label">Data de Nascimento</label>
@@ -83,7 +77,7 @@
             </div>
             <div class="row">
                 <div class="col">
-                    <label class="form-label">NÃºmero</label>
+                    <label class="form-label">Número</label>
                     <input type="text" class="form-control" name="numero"
                         value="{{ old('numero', $dado->numero ?? '') }}">
                 </div>
@@ -142,23 +136,23 @@
             <div class="row">
 
                 <div class="col">
-                    <label class="form-label">PreferÃªncias de Compra </label>
+                    <label class="form-label">Preferência de Compra </label>
                     <input type="text" class="form-control" name="preferenciadecompra"
                         value="{{ old('preferenciadecompra', $dado->preferenciadecompra ?? '') }}">
                 </div>
 
                 <div class="col">
-                    <label class="form-label">ObservaÃ§Ãµes</label>
+                    <label class="form-label">Observações</label>
                     <input type="text" class="form-control" name="observacoes"
                         value="{{ old('observacoes', $dado->observacoes ?? '') }}">
                 </div>
                 <div class="col">
-                    <label class="form-label">NÃºmero de visitas</label>
+                    <label class="form-label">Número de visitas</label>
                     <input type="number" class="form-control" name="numero_visitas"
                         value="{{ old('numero_visitas', $dado->numero_visitas ?? 0) }}" min="0">
                 </div>
                 <div class="col">
-                    <label class="form-label">Data da Ã¹ltima Visita</label>
+                    <label class="form-label">Data da Última Visita</label>
                     <input type="date" class="form-control" name="data_ultima_visita"
                         value="{{ old('data_ultima_visita', isset($dado->data_ultima_visita) ? \Carbon\Carbon::parse($dado->data_ultima_visita)->format('Y-m-d') : '') }}">
                 </div>
@@ -166,7 +160,7 @@
                     <label class="form-label">Cliente fidelizado</label>
                     <select class="form-select" name="cliente_fidelizado">
                         <option value="0" {{ old('cliente_fidelizado', $dado->cliente_fidelizado ?? 0) == 0 ? 'selected' : '' }}>
-                            NÃ£o
+                            Não
                         </option>
                         <option value="1" {{ old('cliente_fidelizado', $dado->cliente_fidelizado ?? 0) == 1 ? 'selected' : '' }}>
                             Sim
@@ -174,7 +168,7 @@
                     </select>
                 </div>
                 <div class="col">
-                    <label class="form-label">NÃ­vel de Fidelidade</label>
+                    <label class="form-label">Nível de Fidelidade</label>
                     <select class="form-select" name="nivel_fidelidade">
                         <option value="0" {{ old('nivel_fidelidade', $dado->nivel_fidelidade ?? 0) == 0 ? 'selected' : '' }}>
                             Bronze

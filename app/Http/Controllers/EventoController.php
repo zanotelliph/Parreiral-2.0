@@ -86,16 +86,14 @@ class EventoController extends Controller
         return redirect()->route('eventos.index')->with('success', 'Evento removido com sucesso.');
     }
 
-    public function pdf()
-    {
-        $eventos = Evento::all();
+   public function pdf()
+{
+    
+    $eventos = Evento::all();
 
-        $pdf = Pdf::loadView('eventos.pdf', compact('eventos'));
-        $content = $pdf->output();
+    $pdf = Pdf::loadView('eventos.pdf', compact('eventos'));
 
-        return response($content, 200)
-            ->header('Content-Type', 'application/pdf')
-            ->header('Content-Disposition', 'attachment; filename="eventos.pdf"');
-    }
+    return $pdf->download('eventos.pdf');
+}
 }
 

@@ -10,7 +10,7 @@
 
 <div class="content-panel">
     <div class="d-flex flex-wrap gap-2 justify-content-end mb-4">
-        <a href="{{ route('relatorios.clientes.pdf', request()->query()) }}" class="btn btn-danger">Baixar PDF</a>
+    
         <a href="{{ url('/') }}" class="btn btn-secondary">Voltar ao painel</a>
     </div>
 

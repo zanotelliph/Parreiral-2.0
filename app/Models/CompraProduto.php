@@ -29,6 +29,7 @@ class CompraProduto extends Model
         'valor_total',
         'data_compra',
         'observacao',
+        
     ];
 
     protected $casts = [

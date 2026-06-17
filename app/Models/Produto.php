@@ -16,14 +16,13 @@ class Produto extends Model
         'nome',
         'categoria_produto',
         'tipo_uva',
-        'lote',
         'lote_produto',
         'preco',
         'preco_produto',
         'desconto_promocao',
         'descricao',
         'imagem',
-        'quantidade_disponivel',
+        'quantidade_disp',
     ];
 
     public function compras(): HasMany

@@ -10,18 +10,37 @@
 <div class="content-panel">
     <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-2 mb-4">
         <form class="row g-2 flex-grow-1" method="GET" action="{{ route('produto.index') }}">
-            <div class="col-md-10"><input type="search" name="q" value="{{ $q ?? '' }}" class="form-control" placeholder="Pesquisar produto, categoria, lote ou tipo"></div>
-            <div class="col-md-2"><button class="btn btn-primary w-100">Buscar</button></div>
+            <div class="col-md-10">
+                <input type="search" name="q" value="{{ $q ?? '' }}" class="form-control" placeholder="Pesquisar produto, categoria, lote ou tipo">
+            </div>
+            <div class="col-md-2">
+                <button class="btn btn-primary w-100">Buscar</button>
+            </div>
         </form>
         <a href="{{ route('produto.pdf') }}" class="btn btn-danger text-nowrap">PDF</a>
         <a href="{{ route('produto.create') }}" class="btn btn-success text-nowrap">Novo produto</a>
     </div>
 
-    @if(session('success'))<div class="alert alert-success">{{ session('success') }}</div>@endif
+    @if(session('success'))
+        <div class="alert alert-success">{{ session('success') }}</div>
+    @endif
 
     <div class="table-responsive">
         <table class="table table-bordered table-hover mb-0">
-            <thead><tr><th>ID</th><th>Foto</th><th>Nome</th><th>Categoria</th><th>Lote</th><th>Preco</th><th>Desconto</th><th>Acoes</th></tr></thead>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Foto</th>
+                    <th>Nome</th>
+                    <th>Categoria</th>
+                    <th>Lote</th>
+                    <th>Preço</th>
+                    <th>Desconto</th>
+                    <th>Descrição</th>
+                    <th>Qtd. Disponível</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
             <tbody>
             @forelse($produtos as $produto)
                 <tr>
@@ -34,16 +53,21 @@
                     <td>{{ $produto->lote_produto ?? $produto->lote }}</td>
                     <td>R$ {{ number_format($produto->preco_produto ?? $produto->preco, 2, ',', '.') }}</td>
                     <td>{{ number_format($produto->desconto_promocao ?? 0, 2, ',', '.') }}%</td>
+                    <td>{{ $produto->descricao ?? '—' }}</td>
+                    <td>{{ $produto->quantidade_disp ?? $produto->quantidade ?? 0 }}</td>
                     <td>
                         <a class="btn btn-sm btn-primary" href="{{ route('produto.edit', $produto) }}">Editar</a>
                         <form class="d-inline" method="POST" action="{{ route('produto.destroy', $produto) }}" onsubmit="return confirm('Excluir?')">
-                            @csrf @method('DELETE')
+                            @csrf 
+                            @method('DELETE')
                             <button class="btn btn-sm btn-danger">Excluir</button>
                         </form>
                     </td>
                 </tr>
             @empty
-                <tr><td colspan="8" class="text-center">Nenhum produto encontrado.</td></tr>
+                <tr>
+                    <td colspan="10" class="text-center">Nenhum produto encontrado.</td>
+                </tr>
             @endforelse
             </tbody>
         </table>

@@ -40,16 +40,8 @@
                 <input class="form-control" name="tipo_uva" value="{{ old('tipo_uva', $dado->tipo_uva ?? '') }}">
             </div>
             <div class="mb-3">
-                <label class="form-label">Lote</label>
-                <input class="form-control" name="lote" value="{{ old('lote', $dado->lote ?? '') }}">
-            </div>
-            <div class="mb-3">
                 <label class="form-label">Lote do produto</label>
                 <input class="form-control" name="lote_produto" value="{{ old('lote_produto', $dado->lote_produto ?? '') }}">
-            </div>
-            <div class="mb-3">
-                <label class="form-label">Preço</label>
-                <input type="number" step="0.01" class="form-control" name="preco" value="{{ old('preco', $dado->preco ?? 0) }}">
             </div>
             <div class="mb-3">
                 <label class="form-label">Preço do produto</label>
@@ -65,7 +57,7 @@
             </div>
             <div class="mb-3">
                 <label class="form-label">Quantidade disponível</label>
-                <input type="number" class="form-control" name="quantidade_disponivel" value="{{ old('quantidade_disponivel', $dado->quantidade_disponivel ?? 0) }}">
+                <input type="number" class="form-control" name="quantidade_disp" value="{{ old('quantidade_disp', $dado->quantidade_disp ?? 0) }}">
             </div>
         </div>
     </div>

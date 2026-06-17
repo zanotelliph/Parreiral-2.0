@@ -18,7 +18,7 @@
 <div class="content-panel">
     <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-2 mb-4">
         <form class="row g-2 flex-grow-1" method="GET" action="{{ route('compras-produtos.index') }}">
-            <div class="col-md-10"><input type="search" name="q" value="{{ $q ?? '' }}" class="form-control" placeholder="Pesquisar cliente, fornecedor, produto ou observação"></div>
+            <div class="col-md-10"><input type="search" name="q" value="{{ $q ?? '' }}" class="form-control" placeholder="Pesquisar cliente, produto ou observação"></div>
             <div class="col-md-2"><button class="btn btn-primary w-100">Buscar</button></div>
         </form>
         <a href="{{ route('compras-produtos.create') }}" class="btn btn-success text-nowrap">Nova compra</a>
@@ -30,7 +30,6 @@
         <table class="table table-bordered table-hover mb-0">
             <thead>
                 <tr>
-                    <th>ID</th><th>Cliente</th><th>Produto</th><th>Fornecedor</th>
                     <th>Quantidade</th><th>Valor total</th><th>Data</th><th>Ações</th>
                 </tr>
             </thead>
@@ -40,7 +39,6 @@
                         <td>{{ $item->id }}</td>
                         <td>{{ $item->cliente?->nome ?? '-' }}</td>
                         <td>{{ $item->produto?->nome ?? $item->item_compra ?? $item->produto_id }}</td>
-                        <td>{{ $item->fornecedor }}</td>
                         <td>{{ $item->quantidade }}</td>
                         <td>R$ {{ number_format($item->valor_total, 2, ',', '.') }}</td>
                         <td>{{ $item->data_compra?->format('d/m/Y') }}</td>

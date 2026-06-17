@@ -4,11 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\Cliente;
 use App\Models\CompraProduto;
-use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 
 class RelatorioController extends Controller
 {
+    
     public function compras(Request $request)
     {
         $dados = $this->dadosCompras($request);
@@ -16,17 +16,7 @@ class RelatorioController extends Controller
         return view('relatorios.compras', $dados);
     }
 
-    public function comprasPdf(Request $request)
-    {
-        $dados = $this->dadosCompras($request);
-        $dados['geradoEm'] = now()->format('d/m/Y H:i');
-
-        $pdf = Pdf::loadView('relatorios.pdf.compras', $dados)
-            ->setPaper('a4', 'landscape');
-
-        return $pdf->download('relatorio-compras-' . now()->format('Y-m-d') . '.pdf');
-    }
-
+   
     public function clientes(Request $request)
     {
         $dados = $this->dadosClientes($request);
@@ -34,16 +24,6 @@ class RelatorioController extends Controller
         return view('relatorios.clientes', $dados);
     }
 
-    public function clientesPdf(Request $request)
-    {
-        $dados = $this->dadosClientes($request);
-        $dados['geradoEm'] = now()->format('d/m/Y H:i');
-
-        $pdf = Pdf::loadView('relatorios.pdf.clientes', $dados)
-            ->setPaper('a4', 'landscape');
-
-        return $pdf->download('relatorio-clientes-' . now()->format('Y-m-d') . '.pdf');
-    }
 
     private function dadosCompras(Request $request): array
     {
