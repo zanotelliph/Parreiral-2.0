@@ -16,7 +16,7 @@ class DashboardController extends Controller
             ? "CAST(strftime('%m', data_compra) AS INTEGER)"
             : 'MONTH(data_compra)';
 
-        $comprasPorMes = CompraProduto::query()
+       $comprasPorMes = CompraProduto::query()
             ->selectRaw($mesExpression . ' as mes, SUM(valor_total) as total')
             ->whereYear('data_compra', now()->year)
             ->groupBy('mes')
@@ -41,7 +41,7 @@ class DashboardController extends Controller
             ->select('status', DB::raw('COUNT(*) as total'))
             ->groupBy('status')
             ->get();
-
+//parte que aparece
         return view('dashboard', [
             'comprasLabels' => $comprasLabels,
             'comprasValores' => $comprasValores,

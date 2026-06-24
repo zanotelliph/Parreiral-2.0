@@ -94,7 +94,7 @@ class EstoqueController extends Controller
     public function destroy(Estoque $estoque)
     {
         if ($estoque->foto) {
-            Storage::disk('public')->delete($estoque->foto);
+            Storage::disk('public')->delete($estoque->foto); 
         }
 
         $estoque->delete();

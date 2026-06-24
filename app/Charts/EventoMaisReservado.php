@@ -16,6 +16,13 @@ class EventoMaisReservado
 
     public function build(): \ArielMejiaDev\LarapexCharts\PieChart
     {
+        /*
+            SELECT evento, COUNT(*) AS total FROM reservas_eventos
+                GROUP BY evento
+                ORDER BY total DESC
+                LIMIT 10
+        */
+
         $dados = DB::table('reservas_eventos')
             ->select(
                 'evento',
@@ -23,6 +30,7 @@ class EventoMaisReservado
             )
             ->groupBy('evento')
             ->orderByDesc('total')
+            ->limit(10) // Mantém o gráfico limpo exibindo o Top 10 eventos
             ->get();
 
         $eventos = [];
@@ -30,12 +38,13 @@ class EventoMaisReservado
 
         foreach ($dados as $item) {
             $eventos[] = $item->evento;
-            $quantidades[] = $item->total;
+            $quantidades[] = (int) $item->total; // Força para inteiro para evitar problemas de tipo
         }
 
         return $this->chart->pieChart()
             ->setTitle('Eventos Mais Reservados')
-            ->addData($quantidades)
-            ->setLabels($eventos);
+            ->setSubtitle('Ranking de reservas registradas')
+            ->addData($quantidades) // Passa o array numérico direto
+            ->setXAxis($eventos);   // Passa os nomes dos eventos para o eixo
     }
 }

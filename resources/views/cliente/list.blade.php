@@ -18,6 +18,7 @@
             <button type="submit" class="btn btn-primary w-100">Buscar</button>
         </div>
         <div class="col-md-2">
+            <a href="{{ route('clientes.pdf') }}" class="btn btn-danger text-nowrap">PDF</a>
             <a href="{{ route('cliente.create') }}" class="btn btn-success w-100">Novo cliente</a>
         </div>
     </form>

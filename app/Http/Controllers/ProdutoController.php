@@ -37,16 +37,24 @@ class ProdutoController extends Controller
     {
         $request->validate([
             'nome' => 'required|max:100',
-            'categoria_produto' => 'nullable|max:100',
-            'tipo_uva' => 'nullable|max:100',
+            'categoria_produto' => 'required|max:100',
+            'tipo_uva' => 'required|max:100',
             'lote_produto' => 'nullable|max:100',
-            'preco_produto' => 'nullable|numeric',
+            'preco_produto' => 'required|numeric',
             'desconto_promocao' => 'nullable|numeric',
             'quantidade_disp' => 'nullable|integer|min:0',
             'imagem' => 'nullable|image|mimes:png,jpg,jpeg|max:5120',
             'descricao' => 'nullable|string',
         ], [
             'nome.required' => "O :attribute é obrigatório",
+            'categoria_produto.required' => "O :attribute é obrigatório",
+            'tipo_uva.required' => "O :attribute é obrigatório",
+            'tipo_uva.max' => "O :attribute deve ter no máximo :max caracteres",
+            'preco_produto.required' => "O :attribute é obrigatório",
+            'preco_produto.numeric' => "O :attribute deve ser um número válido",
+            'desconto_promocao.numeric' => "O :attribute deve ser um número válido",
+            'quantidade_disp.integer' => "O :attribute deve ser um número inteiro",
+            'quantidade_disp.min' => "O :attribute deve ser no mínimo :min",
             'imagem.image' => "O :attribute deve ser uma imagem válida",
             'imagem.mimes' => "O :attribute deve ser das extensões: PNG, JPEG e JPG",
         ]);
@@ -61,9 +69,9 @@ class ProdutoController extends Controller
         if ($imagem) {
             $nome_imagem = date('YmdiHs') . "." . $imagem->getClientOriginalExtension();
             $diretorio = "imagem/produto/";
-            $imagem->storeAs($diretorio, $nome_imagem, 'public');
+            $imagem->storeAs($diretorio, $nome_imagem, 'public'); 
 
-            $data['imagem'] = $diretorio . $nome_imagem;
+            $data['imagem'] = $diretorio . $nome_imagem; 
         }
 
         Produto::create($data);
@@ -75,7 +83,7 @@ class ProdutoController extends Controller
     {
         $dado = Produto::find($id);
 
-        return view('produto.form', ['dado' => $dado]);
+        return view('produto.form', ['dado' => $dado]); 
     }
 
     function update(Request $request, $id)
@@ -94,7 +102,7 @@ class ProdutoController extends Controller
             $diretorio = "imagem/produto/";
             $imagem->storeAs($diretorio, $nome_imagem, 'public');
 
-            $data['imagem'] = $diretorio . $nome_imagem;
+            $data['imagem'] = $diretorio . $nome_imagem; 
         }
 
         $produto->update($data);

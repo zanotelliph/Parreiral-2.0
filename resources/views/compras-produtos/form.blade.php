@@ -29,11 +29,6 @@
             </div>
 
             <div class="col-md-6">
-                <label class="form-label">Item Compra</label>
-                <input type="text" class="form-control" name="item_compra" value="{{ old('item_compra', $compraProduto->item_compra ?? '') }}" placeholder="Ex: Adubo orgânico, Garrafas">
-            </div>
-
-            <div class="col-md-6">
                 <label class="form-label">Forma de Pagamento</label>
                 <input type="text" class="form-control" name="forma_pagamento" value="{{ old('forma_pagamento', $compraProduto->forma_pagamento ?? '') }}" placeholder="Ex: Pix, Cartão, Dinheiro">
             </div>

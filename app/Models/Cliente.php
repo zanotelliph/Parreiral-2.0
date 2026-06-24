@@ -42,6 +42,7 @@ class Cliente extends Model
         'historicodevisitas',
         'imagem',
         'categoria_id',
+    
     ];
 
     public function compras(): HasMany

@@ -2,14 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Charts\EventoMaisReservado; // Classe do gráfico customizado importada corretamente
 use App\Models\ReservaEvento;
 use Illuminate\Http\Request;
-use ArielMejiaDev\LarapexCharts\LarapexChart;
 use Illuminate\Support\Facades\DB;
 
 class ReservaEventoController extends Controller
 {
-    public function index(Request $request, LarapexChart $chart)
+    // AJUSTE: Alterado de LarapexChart $chart para EventoMaisReservado $chart
+    public function index(Request $request, EventoMaisReservado $chart)
     {
         $q = trim($request->input('q', ''));
 
@@ -29,7 +30,7 @@ class ReservaEventoController extends Controller
         return view('reservas-eventos.index', [
             'reservas' => $reservas,
             'q' => $q,
-            'chart' => $this->eventoMaisReservadoChart($chart),
+            'chart' => $chart->build(), // AJUSTE: Agora chama o método build() correto da sua classe customizada
         ]);
     }
 
@@ -96,24 +97,13 @@ class ReservaEventoController extends Controller
 
         return redirect()->route('reservas-eventos.index')->with('success', 'Reserva removida com sucesso.');
     }
-    public function chart(LarapexChart $chart)
-{
-    return view('reservas-eventos.chart', [
-        'chart' => $this->eventoMaisReservadoChart($chart)
-    ]);
-}
 
-    private function eventoMaisReservadoChart(LarapexChart $chart): \ArielMejiaDev\LarapexCharts\PieChart
+    // Rota exclusiva para exibição isolada do gráfico
+    public function chart(EventoMaisReservado $chart)
     {
-        $dados = DB::table('reservas_eventos')
-            ->select('evento', DB::raw('COUNT(*) as total'))
-            ->groupBy('evento')
-            ->orderByDesc('total')
-            ->get();
-
-        return $chart->pieChart()
-            ->setTitle('Eventos Mais Reservados')
-            ->addData($dados->pluck('total')->map(fn ($total) => (int) $total)->all())
-            ->setLabels($dados->pluck('evento')->all());
+        // AJUSTE: Ajustado o nome da view para usar hífen 'reservas-eventos' padronizando com o restante do sistema
+        return view('reservas-eventos.chart', [
+            'chart' => $chart->build()
+        ]);
     }
-} 
+}

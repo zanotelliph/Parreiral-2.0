@@ -31,11 +31,11 @@
             <thead>
                 <tr>
                 <th>PRODUTO</th>
-                <th>ITEM COMPRA</th>
                 <th>PAGAMENTO</th>
-                <th>QTD</th>
+                <th>QUANTIDADE</th>
                 <th>VALOR TOTAL</th>
                 <th>DATA</th>
+                <th>Observações</th>
                 <th>AÇÕES</th>
             </tr>
         </thead>
@@ -43,11 +43,11 @@
             @forelse($compras as $compra)
                 <tr>
                     <td>{{ $compra->produto->nome ?? 'Produto #' . $compra->produto_id }}</td>
-                    <td>{{ $compra->item_compra ?? '-' }}</td>
                     <td>{{ $compra->forma_pagamento ?? '-' }}</td>
                     <td>{{ $compra->quantidade }}</td>
                     <td class="text-nowrap">R$ {{ number_format($compra->valor_total, 2, ',', '.') }}</td>
                     <td class="text-nowrap">{{ $compra->data_compra ? $compra->data_compra->format('d/m/Y') : '-' }}</td>
+                    <td>{{ $compra->observacao ?? '-' }}</td>
                     <td>
                         <div class="d-grid d-sm-flex gap-2">
                             <a class="btn btn-sm btn-primary" href="{{ route('compras-produtos.edit', $compra->id) }}">Editar</a>

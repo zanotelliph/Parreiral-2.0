@@ -37,7 +37,7 @@
                     <th>Preço</th>
                     <th>Desconto</th>
                     <th>Descrição</th>
-                    <th>Qtd. Disponível</th>
+                    <th>Quantidade Disponível</th>
                     <th>Ações</th>
                 </tr>
             </thead>

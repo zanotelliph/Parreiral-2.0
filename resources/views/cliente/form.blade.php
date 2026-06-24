@@ -47,10 +47,6 @@
                 <input type="text" class="form-control" name="telefone" value="{{ old('telefone', $dado->telefone ?? '') }}" required>
             </div>
             <div class="col-md-6">
-                <label class="form-label">CEP</label>
-                <input type="text" class="form-control" name="cep" value="{{ old('cep', $dado->cep ?? '') }}">
-            </div>
-            <div class="col-md-6">
                 <label class="form-label">Data de Cadastro</label>
                 <input type="date" class="form-control" name="data_cadastro" value="{{ old('data_cadastro', $dado->data_cadastro ?? '') }}">
             </div>
@@ -61,7 +57,7 @@
                     <option value="pendente" {{ old('status_financeiro', $dado->status_financeiro ?? 'em dia') == 'pendente' ? 'selected' : '' }}>Pendente</option>
                 </select>
             </div>
-                    {{-- ENDEREÃ‡O --}}
+                    {{-- ENDEREÇO --}}
         <div class="row">
             <div class="col">
                 <label class="form-label">CEP</label>

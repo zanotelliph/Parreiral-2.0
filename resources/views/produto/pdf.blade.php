@@ -26,7 +26,7 @@
         <td>{{ $produto->id }}</td>
         <td>{{ $produto->nome }}</td>
         <td>{{ $produto->categoria_produto }}</td>
-        <td>R$ {{ number_format($produto->preco ?? 0, 2, ',', '.') }}</td>
+        <td>R$ {{ number_format($produto->preco_produto ?? 0, 2, ',', '.') }}</td>
     </tr>
     @endforeach
 </table>

@@ -14,29 +14,41 @@ class ProdutoMaisComprado
         $this->chart = $chart;
     }
 
-    public function build(): \ArielMejiaDev\LarapexCharts\PieChart
-    {
-        $produtoPorCompra = DB::table('compras_produtos')
-    ->select(
-        'item_compra',
-        DB::raw('COUNT(*) as total')
-    )
-    ->groupBy('item_compra')
-    ->orderByDesc('total')
-    ->get();
+   public function build(): \ArielMejiaDev\LarapexCharts\HorizontalBar
+{
+    /*
+        SELECT produtos.nome, SUM(compras_produtos.quantidade) as total 
+            FROM compras_produtos
+            INNER JOIN produtos ON produtos.id = compras_produtos.produto_id
+            GROUP BY produtos.id, produtos.nome
+            ORDER BY total DESC
+            LIMIT 10
+    */
 
-$produtos = [];
-$quantidades = [];
+    // CORRIGIDO: Agora busca o nome real do produto usando relacionamento de IDs
+    $produtoPorCompra = DB::table('compras_produtos')
+        ->join('produtos', 'produtos.id', '=', 'compras_produtos.produto_id')
+        ->select(
+            'produtos.nome as produto_nome', 
+            DB::raw('SUM(compras_produtos.quantidade) as total')
+        )
+        ->groupBy('produtos.id', 'produtos.nome')
+        ->orderByDesc('total')
+        ->limit(10)
+        ->get();
 
-foreach ($produtoPorCompra as $item) {
-    $produtos[] = $item->item_compra;
-    $quantidades[] = $item->total;
-}
+    $produtos = [];
+    $quantidades = [];
 
-        return $this->chart->pieChart()
-            ->setTitle('Produto Mais Comprado')
-            ->setSubtitle('Compras registradas')
-            ->addData($quantidades)
-            ->setLabels($produtos);
+    foreach ($produtoPorCompra as $item) {
+        $produtos[] = $item->produto_nome; // CORRIGIDO: Lê a propriedade nova
+        $quantidades[] = (int) $item->total;
     }
-};
+
+    return $this->chart->horizontalBarChart()
+        ->setTitle('Produtos Mais Comprados')
+        ->setSubtitle('Ranking por quantidade total de itens vendidos')
+        ->addData($quantidades)
+        ->setXAxis($produtos);
+}
+}

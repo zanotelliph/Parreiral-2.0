@@ -5,12 +5,19 @@
 @section('conteudo')
 @include('partials.page-header', [
     'title' => 'Relatório de Clientes',
-    'subtitle' => 'Identificadores únicos, status financeiro e histórico de compras',
+    'subtitle' => 'Métricas de engajamento, fidelidade e situação financeira',
 ])
+
+@if(isset($chart))
+<div class="card mb-4 border-0 shadow-sm">
+    <div class="card-body">
+        {!! $chart->container() !!}
+    </div>
+</div>
+@endif
 
 <div class="content-panel">
     <div class="d-flex flex-wrap gap-2 justify-content-end mb-4">
-    
         <a href="{{ url('/') }}" class="btn btn-secondary">Voltar ao painel</a>
     </div>
 
@@ -29,27 +36,43 @@
     </form>
 
     <div class="row g-3 mb-4">
-        <div class="col-md-4">
-            <div class="card card-parreiral stat-card">
+        <div class="col-md">
+            <div class="card card-parreiral stat-card h-100">
                 <div class="card-body">
-                    <p class="stat-label mb-1">Total de clientes</p>
-                    <p class="stat-value mb-0">{{ $totalClientes }}</p>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="card card-parreiral-vine stat-card">
-                <div class="card-body">
-                    <p class="stat-label mb-1">Em dia</p>
+                    <p class="stat-label mb-1">Em Dia</p>
                     <p class="stat-value mb-0 text-success">{{ $clientesEmDia }}</p>
                 </div>
             </div>
         </div>
-        <div class="col-md-4">
-            <div class="card card-parreiral-gold stat-card">
+        <div class="col-md">
+            <div class="card card-parreiral-gold stat-card h-100">
                 <div class="card-body">
                     <p class="stat-label mb-1">Pendentes</p>
                     <p class="stat-value mb-0" style="color: var(--wine-600);">{{ $clientesPendentes }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md">
+            <div class="card card-parreiral stat-card h-100">
+                <div class="card-body">
+                    <p class="stat-label mb-1">Clientes Bronze</p>
+                    <p class="stat-value mb-0 text-muted">{{ $clientesBronze }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md">
+            <div class="card card-parreiral stat-card h-100">
+                <div class="card-body">
+                    <p class="stat-label mb-1">Clientes Ouro</p>
+                    <p class="stat-value mb-0 text-warning">{{ $clientesOuro }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md">
+            <div class="card card-parreiral-vine stat-card h-100">
+                <div class="card-body">
+                    <p class="stat-label mb-1">Já Visitaram</p>
+                    <p class="stat-value mb-0 text-info">{{ $clientesJaVisitaram }}</p>
                 </div>
             </div>
         </div>
@@ -59,8 +82,14 @@
         <table class="table table-bordered table-striped align-middle mb-0">
             <thead>
                 <tr>
-                    <th>ID</th><th>Identificador único</th><th>Nome</th><th>E-mail</th>
-                    <th>Status financeiro</th><th>Qtd. compras</th><th>Total em compras</th><th>Cadastro</th>
+                    <th>ID</th>
+                    <th>Identificador único</th>
+                    <th>Nome</th>
+                    <th>E-mail</th>
+                    <th>Status financeiro</th>
+                    <th>Nível Fidelidade</th>
+                    <th>Visitas</th>
+                    <th>Cadastro</th>
                 </tr>
             </thead>
             <tbody>
@@ -74,11 +103,19 @@
                                 <span class="text-muted">—</span>
                             @endif
                         </td>
-                        <td>{{ $cliente->nome }}</td>
+                        <td><strong>{{ $cliente->nome }}</strong></td>
                         <td>{{ $cliente->email }}</td>
                         <td>{{ ucfirst($cliente->status_financeiro ?? '—') }}</td>
-                        <td>{{ $cliente->compras_count }}</td>
-                        <td>R$ {{ number_format($cliente->compras_sum_valor_total ?? 0, 2, ',', '.') }}</td>
+                        <td>
+                            @if($cliente->nivel_fidelidade == 2)
+                                <span class="badge bg-warning text-dark">Ouro</span>
+                            @elseif($cliente->nivel_fidelidade == 1)
+                                <span class="badge bg-secondary">Prata</span>
+                            @else
+                                <span class="badge bg-dark">Bronze</span>
+                            @endif
+                        </td>
+                        <td>{{ $cliente->numero_visitas ?? 0 }}</td>
                         <td>{{ $cliente->data_cadastro ? \Carbon\Carbon::parse($cliente->data_cadastro)->format('d/m/Y') : '—' }}</td>
                     </tr>
                 @empty
@@ -90,4 +127,10 @@
         </table>
     </div>
 </div>
+
+@if(isset($chart))
+    <script src="{{ $chart->cdn() }}"></script>
+    {{ $chart->script() }}
+@endif
+
 @endsection

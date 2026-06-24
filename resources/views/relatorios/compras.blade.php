@@ -49,7 +49,7 @@
                     <th>PRODUTO</th>
                     <th>ITEM COMPRA</th>
                     <th>PAGAMENTO</th>
-                    <th>QTD</th>
+                    <th>Quantidade</th>
                     <th>VALOR TOTAL</th>
                     <th>DATA</th>
                 </tr>

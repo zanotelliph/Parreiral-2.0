@@ -14,7 +14,6 @@ class CompraProduto extends Model
 
     protected $fillable = [
         'produto_id',
-        'item_compra',
         'descricao',
         'quantidade',
         'custo_compra',
@@ -23,7 +22,8 @@ class CompraProduto extends Model
         'forma_pagamento',
         'valor_total',
         'data_compra',
-        'observacao'
+        'observacao',
+        'item_compra'
     ];
 
     protected $casts = [

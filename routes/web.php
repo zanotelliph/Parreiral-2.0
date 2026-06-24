@@ -25,21 +25,16 @@ Route::delete('cliente/{id}', [ClienteController::class, 'destroy'])->name('clie
 // PDFs (Produtos e Eventos)
 Route::get('produto/pdf', [ProdutoController::class, 'pdf'])->name('produto.pdf');
 Route::get('eventos/pdf', [EventoController::class, 'pdf'])->name('eventos.pdf');
+Route::get('clientes/pdf', [ClienteController::class, 'pdf'])->name('clientes.pdf');
 
 // Relatórios (Visualização em Tela)
 Route::get('relatorios/compras', [RelatorioController::class, 'compras'])->name('relatorios.compras');
 Route::get('relatorios/clientes', [RelatorioController::class, 'clientes'])->name('relatorios.clientes');
 
-// Gráficos
-Route::get(
-    'compras-produtos/chart',
-    [CompraProdutoController::class, 'chart']
-)->name('compras-produtos.chart');
-
-Route::get(
-    'reservas-eventos/chart',
-    [ReservaEventoController::class, 'chart']
-)->name('reservas-eventos.chart');
+// Gráficos 
+Route::get('compras-produtos/chart', [CompraProdutoController::class, 'chart'])->name('compras-produtos.chart');
+Route::get('reservas-eventos/chart', [ReservaEventoController::class, 'chart'])->name('reservas-eventos.chart');
+Route::get('compradores_produtos/chart', [ClienteController::class, 'chart'])->name('compradores_produtos.chart');
 
 // Resources
 Route::resource('produto', ProdutoController::class);
