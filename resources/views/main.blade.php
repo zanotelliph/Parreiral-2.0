@@ -30,7 +30,7 @@
                     <li class="nav-item"><a class="nav-link" href="{{ route('compras-produtos.index') }}">Compras</a></li>
                     <li class="nav-item"><a class="nav-link" href="{{ route('estoques.index') }}">Estoque</a></li>
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Relatórios</a>
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Informações de ADM</a>
                         <ul class="dropdown-menu dropdown-menu-end">
                             <li><a class="dropdown-item" href="{{ route('relatorios.compras') }}">Compras</a></li>
                             <li><a class="dropdown-item" href="{{ route('relatorios.clientes') }}">Clientes</a></li>

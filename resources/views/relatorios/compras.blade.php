@@ -1,9 +1,9 @@
 @extends('main')
-@section('titulo', 'Relatório de Compras')
+@section('titulo', 'Informações de compras')
 @section('conteudo')
 
 @include('partials.page-header', [
-    'title' => 'Relatório de Compras',
+    'title' => 'Informações de compras',
     'subtitle' => 'Análise de movimentações e insumos da vinícola',
 ])
 
@@ -47,7 +47,7 @@
         <table class="table table-bordered table-hover align-middle mb-0">
             <thead class="table-dark"> <tr>
                     <th>PRODUTO</th>
-                    <th>ITEM COMPRA</th>
+
                     <th>PAGAMENTO</th>
                     <th>Quantidade</th>
                     <th>VALOR TOTAL</th>
@@ -58,7 +58,7 @@
                 @forelse($compras as $compra)
                     <tr>
                         <td>{{ $compra->produto->nome ?? 'Produto #' . $compra->produto_id }}</td>
-                        <td>{{ $compra->item_compra ?? '-' }}</td>
+
                         <td>{{ $compra->forma_pagamento ?? '-' }}</td>
                         <td>{{ $compra->quantidade }}</td>
                         <td class="text-nowrap">R$ {{ number_format($compra->valor_total, 2, ',', '.') }}</td>
